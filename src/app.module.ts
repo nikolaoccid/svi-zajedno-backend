@@ -50,7 +50,7 @@ const dbModule = TypeOrmModule.forRootAsync({
     SchoolYearModule,
     CategoryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

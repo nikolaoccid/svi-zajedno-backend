@@ -12,9 +12,10 @@ import { SchoolYearService } from './school-year.service';
 import { SchoolYearDto } from './dto/school-year.dto';
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('school-year')
+@ApiTags('School year')
 @ApiBearerAuth()
 export class SchoolYearController {
   constructor(private readonly schoolYearService: SchoolYearService) {}
