@@ -12,6 +12,8 @@ import { CookieSessionModule } from 'nestjs-cookie-session';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SchoolYearModule } from './school-year/school-year.module';
 import { SchoolYear } from './school-year/entities/school-year.entity';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/entities/category.entity';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],
@@ -30,9 +32,9 @@ const dbModule = TypeOrmModule.forRootAsync({
     username: config.databaseUsername(),
     password: config.databasePassword(),
     database: config.databaseName(),
-    entities: [User, SchoolYear],
+    entities: [User, SchoolYear, Category],
     synchronize: true,
-    ssl: config.databaseDisableSsl() !== 'true',
+    ssl: config.databaseDisableSsl() != 'true',
     namingStrategy: new SnakeNamingStrategy(),
   }),
   inject: [Config],
@@ -46,6 +48,7 @@ const dbModule = TypeOrmModule.forRootAsync({
     cookieSessionModule,
     AuthModule,
     SchoolYearModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
