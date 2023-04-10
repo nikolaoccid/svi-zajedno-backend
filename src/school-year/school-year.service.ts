@@ -42,7 +42,6 @@ export class SchoolYearService {
   }
   isSequent({ startYear, endYear }) {
     if (startYear + 1 != endYear || startYear < 2010) {
-      console.log(startYear, endYear);
       throw new BadRequestException();
     }
     return;
