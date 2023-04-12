@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import * as diagnostics_channel from 'diagnostics_channel';
+import { IS_LENGTH, Length } from 'class-validator';
 
 @Entity()
 export class ProjectUser {
@@ -7,7 +7,8 @@ export class ProjectUser {
   id: number;
 
   @Column({ unique: true })
-  oib: number;
+  @Length(10)
+  oib: string;
 
   @Column()
   guardianName: string;
@@ -34,7 +35,7 @@ export class ProjectUser {
   school: string;
 
   @Column()
-  MobilePhone: string;
+  mobilePhone: string;
 
   @Column()
   email: string;

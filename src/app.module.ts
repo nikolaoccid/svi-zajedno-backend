@@ -1,7 +1,4 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UtilsModule } from './utils/utils.module';
 import { UsersModule } from './users/users.module';
@@ -15,6 +12,10 @@ import { SchoolYear } from './school-year/entities/school-year.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
 import { ProjectUserModule } from './project-user/project-user.module';
+import { ProjectUser } from './project-user/entities/project-user.entity';
+import { QueryFailedErrorFilter } from './query-failed-error.filter';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { AxiosErrorFilter } from './axios-error.filter';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],
@@ -33,13 +34,28 @@ const dbModule = TypeOrmModule.forRootAsync({
     username: config.databaseUsername(),
     password: config.databasePassword(),
     database: config.databaseName(),
-    entities: [User, SchoolYear, Category],
+    entities: [User, SchoolYear, Category, ProjectUser],
     synchronize: true,
     ssl: config.databaseDisableSsl() != 'true',
     namingStrategy: new SnakeNamingStrategy(),
   }),
   inject: [Config],
 });
+
+const queryFieldFilterModule = {
+  provide: APP_FILTER,
+  useClass: QueryFailedErrorFilter,
+};
+
+const genericErrorFilterModule = {
+  provide: APP_FILTER,
+  useClass: AxiosErrorFilter,
+};
+
+const classSerializerInterceptorModule = {
+  provide: APP_INTERCEPTOR,
+  useClass: ClassSerializerInterceptor,
+};
 
 @Module({
   imports: [
@@ -53,6 +69,10 @@ const dbModule = TypeOrmModule.forRootAsync({
     ProjectUserModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    classSerializerInterceptorModule,
+    genericErrorFilterModule,
+    queryFieldFilterModule,
+  ],
 })
 export class AppModule {}
