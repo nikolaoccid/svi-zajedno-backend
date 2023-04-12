@@ -1,54 +1,45 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsAlpha,
   IsAlphanumeric,
-  IsDate,
   IsEmail,
   IsMobilePhone,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
+  Length,
 } from 'class-validator';
-import { Optional } from '@nestjs/common';
+import { ignoreElements } from 'rxjs';
 
 export class CreateProjectUserDto {
   @IsNotEmpty()
-  @IsNumber()
-  oib: number;
+  oib: string;
 
   @IsNotEmpty()
-  @IsAlpha()
   guardianName: string;
 
   @IsNotEmpty()
-  @IsAlpha()
   guardianSurname: string;
 
   @IsNotEmpty()
-  @IsAlpha()
   childName: string;
 
   @IsNotEmpty()
-  @IsAlpha()
   childSurname: string;
 
   @IsNotEmpty()
-  @IsDate()
   dateOfBirth: string;
 
   @IsNotEmpty()
-  @IsAlphanumeric()
   address: string;
 
   @IsNotEmpty()
-  @IsAlpha()
   city: string;
 
-  @Optional()
+  @IsOptional()
   school: string;
 
   @IsNotEmpty()
-  @IsMobilePhone()
-  MobilePhone: string;
+  mobilePhone: string;
 
   @IsNotEmpty()
   @IsEmail()
