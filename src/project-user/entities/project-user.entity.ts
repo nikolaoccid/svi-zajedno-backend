@@ -7,7 +7,6 @@ export class ProjectUser {
   id: number;
 
   @Column({ unique: true })
-  @Length(10)
   oib: string;
 
   @Column()
