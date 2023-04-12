@@ -14,6 +14,7 @@ import { SchoolYearModule } from './school-year/school-year.module';
 import { SchoolYear } from './school-year/entities/school-year.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
+import { ProjectUserModule } from './project-user/project-user.module';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],
@@ -49,6 +50,7 @@ const dbModule = TypeOrmModule.forRootAsync({
     AuthModule,
     SchoolYearModule,
     CategoryModule,
+    ProjectUserModule,
   ],
   controllers: [],
   providers: [],
