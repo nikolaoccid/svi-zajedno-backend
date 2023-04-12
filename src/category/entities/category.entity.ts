@@ -7,6 +7,5 @@ export class Category {
   id: number;
 
   @Column({ unique: true })
-  @IsAlpha()
   categoryName: string;
 }
