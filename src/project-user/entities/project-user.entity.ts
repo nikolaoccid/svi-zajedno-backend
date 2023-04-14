@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IS_LENGTH, Length } from 'class-validator';
 
 @Entity()
 export class ProjectUser {

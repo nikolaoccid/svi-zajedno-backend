@@ -1,29 +1,24 @@
-import {
-  IsAlpha,
-  IsAlphanumeric,
-  IsEmail,
-  IsMobilePhone,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  Length,
-} from 'class-validator';
-import { ignoreElements } from 'rxjs';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProjectUserDto {
   @IsNotEmpty()
+  @IsString()
   oib: string;
 
   @IsNotEmpty()
+  @IsString()
   guardianName: string;
 
   @IsNotEmpty()
+  @IsString()
   guardianSurname: string;
 
   @IsNotEmpty()
+  @IsString()
   childName: string;
 
   @IsNotEmpty()
+  @IsString()
   childSurname: string;
 
   @IsNotEmpty()
@@ -39,6 +34,7 @@ export class CreateProjectUserDto {
   school: string;
 
   @IsNotEmpty()
+  @IsString()
   mobilePhone: string;
 
   @IsNotEmpty()
