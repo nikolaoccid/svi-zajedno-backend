@@ -3,6 +3,7 @@ import { CategoryDto } from './dto/category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
+import { ProjectAssociate } from '../project-associate/entities/project-associate.entity';
 
 @Injectable()
 export class CategoryService {
@@ -15,7 +16,11 @@ export class CategoryService {
   }
 
   async findAll() {
-    return await this.categoryRepository.find();
+    return await this.categoryRepository.find({
+      relations: {
+        projectAssociate: true,
+      },
+    });
   }
 
   async findOne(id: number) {
