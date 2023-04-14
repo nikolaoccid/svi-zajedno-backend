@@ -16,6 +16,8 @@ import { ProjectUser } from './project-user/entities/project-user.entity';
 import { QueryFailedErrorFilter } from './query-failed-error.filter';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AxiosErrorFilter } from './axios-error.filter';
+import { ProjectAssociateModule } from './project-associate/project-associate.module';
+import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],
@@ -34,7 +36,7 @@ const dbModule = TypeOrmModule.forRootAsync({
     username: config.databaseUsername(),
     password: config.databasePassword(),
     database: config.databaseName(),
-    entities: [User, SchoolYear, Category, ProjectUser],
+    entities: [User, SchoolYear, Category, ProjectUser, ProjectAssociate],
     synchronize: true,
     ssl: config.databaseDisableSsl() != 'true',
     namingStrategy: new SnakeNamingStrategy(),
@@ -67,6 +69,7 @@ const classSerializerInterceptorModule = {
     SchoolYearModule,
     CategoryModule,
     ProjectUserModule,
+    ProjectAssociateModule,
   ],
   controllers: [],
   providers: [
