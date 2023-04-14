@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateProjectUserDto } from './create-project-user.dto';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Optional } from '@nestjs/common';
 
 export class UpdateProjectUserDto extends PartialType(CreateProjectUserDto) {
@@ -8,18 +8,23 @@ export class UpdateProjectUserDto extends PartialType(CreateProjectUserDto) {
   id: number;
 
   @IsNotEmpty()
+  @IsString()
   oib: string;
 
   @IsNotEmpty()
+  @IsString()
   guardianName: string;
 
   @IsNotEmpty()
+  @IsString()
   guardianSurname: string;
 
   @IsNotEmpty()
+  @IsString()
   childName: string;
 
   @IsNotEmpty()
+  @IsString()
   childSurname: string;
 
   @IsNotEmpty()
@@ -35,7 +40,8 @@ export class UpdateProjectUserDto extends PartialType(CreateProjectUserDto) {
   school: string;
 
   @IsNotEmpty()
-  MobilePhone: string;
+  @IsString()
+  mobilePhone: string;
 
   @IsNotEmpty()
   @IsEmail()

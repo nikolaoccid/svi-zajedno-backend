@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsAlpha } from 'class-validator';
 
 @Entity()
 export class Category {
