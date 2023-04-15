@@ -42,4 +42,6 @@ export class ProjectAssociate {
 
   @ManyToOne(() => Category, (category) => category.projectAssociate)
   category: Category;
+  @Column()
+  categoryId: number;
 }

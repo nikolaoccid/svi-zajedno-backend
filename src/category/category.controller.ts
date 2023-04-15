@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
@@ -44,7 +44,7 @@ export class CategoryController {
     return this.categoryService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @AuthenticatedUser() user: User,
     @Param('id') id: string,
