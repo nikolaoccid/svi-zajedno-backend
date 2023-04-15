@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UnauthorizedException,
 } from '@nestjs/common';
 import { SchoolYearService } from './school-year.service';
@@ -57,7 +58,7 @@ export class SchoolYearController {
     return this.schoolYearService.getByStartYear(+startYear);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @AuthenticatedUser() user: User,
     @Param('id') id: string,
@@ -66,7 +67,7 @@ export class SchoolYearController {
     if (user.role != UserRole.Admin) {
       throw new UnauthorizedException();
     }
-    return this.schoolYearService.update(+id, schoolYearDto);
+    this.schoolYearService.update(+id, schoolYearDto);
   }
 
   @Delete(':id')

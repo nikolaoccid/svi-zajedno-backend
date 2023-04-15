@@ -3,10 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UnauthorizedException,
+  Put,
 } from '@nestjs/common';
 import { ProjectAssociateService } from './project-associate.service';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
@@ -50,7 +50,7 @@ export class ProjectAssociateController {
     return this.projectAssociateService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateProjectAssociateDto: UpdateProjectAssociateDto,

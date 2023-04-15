@@ -28,5 +28,5 @@ export class CreateProjectAssociateDto {
   projectAssociateStatus: AssociateStatus;
 
   @IsNotEmpty()
-  category: Category;
+  categoryId: number;
 }

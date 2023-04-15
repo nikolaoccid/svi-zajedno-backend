@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { SchoolYearDto } from './dto/school-year.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -33,7 +37,11 @@ export class SchoolYearService {
 
   async update(id: number, schoolYearDto: SchoolYearDto) {
     this.isSequent(schoolYearDto);
-    return await this.schoolYearRepository.update(id, schoolYearDto);
+    const result = await this.schoolYearRepository.update(id, schoolYearDto);
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
+    return await this.schoolYearRepository.findOneBy({ id });
   }
 
   async remove(id: number) {

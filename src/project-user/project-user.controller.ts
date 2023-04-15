@@ -3,10 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UnauthorizedException,
+  Put,
 } from '@nestjs/common';
 import { ProjectUserService } from './project-user.service';
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
@@ -48,7 +48,7 @@ export class ProjectUserController {
     return this.projectUserService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @AuthenticatedUser() user: User,
     @Param('id') id: string,
