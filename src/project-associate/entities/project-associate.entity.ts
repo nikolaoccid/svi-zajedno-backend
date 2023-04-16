@@ -1,14 +1,12 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../../category/entities/category.entity';
-import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
-import { Exclude } from 'class-transformer';
+import { Activity } from '../../activity/entities/activity.entity';
 export enum AssociateStatus {
   Active = 'active',
   Pending = 'pending',
@@ -44,4 +42,7 @@ export class ProjectAssociate {
   category: Category;
   @Column()
   categoryId: number;
+
+  @OneToMany(() => Activity, (activity) => activity.projectAssociate)
+  activity: Activity[];
 }
