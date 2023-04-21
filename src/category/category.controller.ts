@@ -8,11 +8,12 @@ import {
   Put,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { User, UserRole } from '../users/user.entity';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dto/category.dto';
-import { User, UserRole } from '../users/user.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 
 @Controller('category')
 @ApiTags('Category')

@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
 
 @Entity()

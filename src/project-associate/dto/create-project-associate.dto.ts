@@ -1,6 +1,6 @@
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
 import { AssociateStatus } from '../entities/project-associate.entity';
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Category } from '../../category/entities/category.entity';
 
 export class CreateProjectAssociateDto {
   @IsNotEmpty()

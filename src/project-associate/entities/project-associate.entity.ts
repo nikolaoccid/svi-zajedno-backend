@@ -5,8 +5,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from '../../category/entities/category.entity';
+
 import { Activity } from '../../activity/entities/activity.entity';
+import { Category } from '../../category/entities/category.entity';
 export enum AssociateStatus {
   Active = 'active',
   Pending = 'pending',

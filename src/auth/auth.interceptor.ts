@@ -1,10 +1,11 @@
 import {
+  CallHandler,
+  ExecutionContext,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+
 import { UsersService } from '../users/users.service';
 import { RequestType } from './types/request.type';
 

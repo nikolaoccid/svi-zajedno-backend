@@ -1,19 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  UnauthorizedException,
+  Get,
+  Param,
+  Post,
   Put,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { ProjectAssociateService } from './project-associate.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { User, UserRole } from '../users/user.entity';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User, UserRole } from '../users/user.entity';
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { ProjectAssociateService } from './project-associate.service';
 
 @Controller('project-associate')
 @ApiBearerAuth()

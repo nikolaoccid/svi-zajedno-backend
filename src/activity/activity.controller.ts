@@ -1,19 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  UnauthorizedException,
+  Get,
+  Param,
+  Post,
   Put,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { User, UserRole } from '../users/user.entity';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User, UserRole } from '../users/user.entity';
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 
 @Controller('activity')
 @ApiBearerAuth()

@@ -3,9 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SchoolYearDto } from './dto/school-year.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { SchoolYearDto } from './dto/school-year.dto';
 import { SchoolYear } from './entities/school-year.entity';
 
 @Injectable()

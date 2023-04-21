@@ -1,27 +1,28 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UtilsModule } from './utils/utils.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { User } from './users/user.entity';
-import { Config } from './utils/config.service';
 import { CookieSessionModule } from 'nestjs-cookie-session';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { SchoolYearModule } from './school-year/school-year.module';
-import { SchoolYear } from './school-year/entities/school-year.entity';
-import { CategoryModule } from './category/category.module';
-import { Category } from './category/entities/category.entity';
-import { ProjectUserModule } from './project-user/project-user.module';
-import { ProjectUser } from './project-user/entities/project-user.entity';
-import { QueryFailedErrorFilter } from './query-failed-error.filter';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { AxiosErrorFilter } from './axios-error.filter';
-import { ProjectAssociateModule } from './project-associate/project-associate.module';
-import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
+
 import { ActivityModule } from './activity/activity.module';
 import { Activity } from './activity/entities/activity.entity';
-import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
+import { AuthModule } from './auth/auth.module';
+import { AxiosErrorFilter } from './axios-error.filter';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/entities/category.entity';
+import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
+import { ProjectAssociateModule } from './project-associate/project-associate.module';
+import { ProjectUser } from './project-user/entities/project-user.entity';
+import { ProjectUserModule } from './project-user/project-user.module';
+import { QueryFailedErrorFilter } from './query-failed-error.filter';
+import { SchoolYear } from './school-year/entities/school-year.entity';
+import { SchoolYearModule } from './school-year/school-year.module';
 import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
+import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
+import { User } from './users/user.entity';
+import { UsersModule } from './users/users.module';
+import { Config } from './utils/config.service';
+import { UtilsModule } from './utils/utils.module';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],

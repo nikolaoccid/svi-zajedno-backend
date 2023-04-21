@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
 export enum ActivityStatus {
   Active = 'active',
