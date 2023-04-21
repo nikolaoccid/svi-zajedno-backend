@@ -20,6 +20,8 @@ import { ProjectAssociateModule } from './project-associate/project-associate.mo
 import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
 import { ActivityModule } from './activity/activity.module';
 import { Activity } from './activity/entities/activity.entity';
+import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
+import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
 
 const cookieSessionModule = CookieSessionModule.forRootAsync({
   inject: [Config],
@@ -45,6 +47,7 @@ const dbModule = TypeOrmModule.forRootAsync({
       ProjectUser,
       ProjectAssociate,
       Activity,
+      StudentOnSchoolYear,
     ],
     synchronize: true,
     ssl: config.databaseDisableSsl() != 'true',
@@ -80,6 +83,7 @@ const classSerializerInterceptorModule = {
     ProjectUserModule,
     ProjectAssociateModule,
     ActivityModule,
+    StudentOnSchoolYearModule,
   ],
   controllers: [],
   providers: [
