@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Activity } from '../../activity/entities/activity.entity';
+import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
 
 @Entity()
 export class ProjectUser {
@@ -37,4 +39,9 @@ export class ProjectUser {
 
   @Column()
   email: string;
+  @OneToMany(
+    () => StudentOnSchoolYear,
+    (studentOnSchoolYear) => studentOnSchoolYear.user,
+  )
+  studentOnSchoolYear: StudentOnSchoolYear[];
 }

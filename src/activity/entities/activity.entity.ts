@@ -24,6 +24,7 @@ export class Activity {
     (projectAssociate) => projectAssociate.category,
   )
   projectAssociate: ProjectAssociate;
+
   @Column()
   projectAssociateId: number;
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
 
 @Entity()
 export class SchoolYear {
@@ -10,4 +11,9 @@ export class SchoolYear {
 
   @Column({ unique: true })
   endYear: number;
+  @OneToMany(
+    () => StudentOnSchoolYear,
+    (studentOnSchoolYear) => studentOnSchoolYear.schoolYear,
+  )
+  studentOnSchoolYear: StudentOnSchoolYear[];
 }
