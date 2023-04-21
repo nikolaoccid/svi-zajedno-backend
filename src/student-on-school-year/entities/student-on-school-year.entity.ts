@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../users/user.entity';
+
 import { ProjectUser } from '../../project-user/entities/project-user.entity';
 import { SchoolYear } from '../../school-year/entities/school-year.entity';
+import { User } from '../../users/user.entity';
 export enum Status {
   Active = 'active',
   Inactive = 'inactive',

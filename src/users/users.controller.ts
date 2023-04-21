@@ -7,11 +7,12 @@ import {
   UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from './users.service';
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User } from './user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './user.entity';
+import { UsersService } from './users.service';
 
 @Controller('users')
 @ApiTags('Users')

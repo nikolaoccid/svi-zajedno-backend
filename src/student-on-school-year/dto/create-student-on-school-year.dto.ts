@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
+
 import { Status } from '../entities/student-on-school-year.entity';
 
 export class CreateStudentOnSchoolYearDto {

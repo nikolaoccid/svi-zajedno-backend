@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { ProjectAssociateService } from './project-associate.service';
 
 describe('ProjectAssociateService', () => {

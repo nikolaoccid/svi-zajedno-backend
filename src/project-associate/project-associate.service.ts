@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
-import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
+import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
 import { ProjectAssociate } from './entities/project-associate.entity';
 
 @Injectable()

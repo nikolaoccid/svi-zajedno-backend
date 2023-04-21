@@ -4,16 +4,16 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Put,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SchoolYearService } from './school-year.service';
-import { SchoolYearDto } from './dto/school-year.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { SchoolYearDto } from './dto/school-year.dto';
+import { SchoolYearService } from './school-year.service';
 
 @Controller('school-year')
 @ApiTags('School year')

@@ -1,12 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { HashService } from '../users/hash.service';
-import { AuthController } from './auth.controller';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+
+import { HashService } from '../users/hash.service';
+import { UsersModule } from '../users/users.module';
+import { AuthController } from './auth.controller';
 import { AuthInterceptor } from './auth.interceptor';
-import { JwtService } from './jwt.service';
+import { AuthService } from './auth.service';
 import { JwtMiddleware } from './jwt.middleware';
+import { JwtService } from './jwt.service';
 
 @Module({
   imports: [UsersModule],

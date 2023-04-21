@@ -5,10 +5,11 @@ import {
   Session,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from './jwt.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth')
