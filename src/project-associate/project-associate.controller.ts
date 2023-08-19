@@ -14,6 +14,7 @@ import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorat
 import { User, UserRole } from '../users/user.entity';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
+import { ProjectAssociate } from './entities/project-associate.entity';
 import { ProjectAssociateService } from './project-associate.service';
 
 @Controller('project-associate')
@@ -28,7 +29,7 @@ export class ProjectAssociateController {
   create(
     @Body() createProjectAssociateDto: CreateProjectAssociateDto,
     @AuthenticatedUser() user: User,
-  ) {
+  ): Promise<ProjectAssociate> {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }

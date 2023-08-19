@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
 
@@ -9,6 +15,7 @@ export class Category {
 
   @Column({ unique: true })
   categoryName: string;
+
   @OneToMany(
     () => ProjectAssociate,
     (projectAssociate) => projectAssociate.category,

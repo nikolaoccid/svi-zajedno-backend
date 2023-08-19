@@ -12,6 +12,7 @@ export class SchoolYear {
 
   @Column({ unique: true })
   endYear: number;
+
   @OneToMany(
     () => StudentOnSchoolYear,
     (studentOnSchoolYear) => studentOnSchoolYear.schoolYear,

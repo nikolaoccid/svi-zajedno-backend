@@ -9,6 +9,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { LoginResponseDto } from './dto/login.response.dto';
 import { JwtService } from './jwt.service';
 
 @Controller('auth')
@@ -40,7 +41,7 @@ export class AuthController {
   }
 
   @Post('/login/jwt')
-  async loginJwt(@Body() loginDto: LoginDto) {
+  async loginJwt(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.authService.getUserByLoginCredentials(loginDto);
     if (!user) {
       throw new UnauthorizedException('Invalid username or password');
