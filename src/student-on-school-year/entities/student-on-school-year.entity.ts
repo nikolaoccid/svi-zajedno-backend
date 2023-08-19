@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { ProjectUser } from '../../project-user/entities/project-user.entity';
 import { SchoolYear } from '../../school-year/entities/school-year.entity';
+import { StudentOnActivity } from '../../student-on-activity/entities/student-on-activity.entity';
 import { User } from '../../users/user.entity';
 export enum Status {
   Active = 'active',
@@ -29,4 +36,9 @@ export class StudentOnSchoolYear {
 
   @Column()
   status: Status;
+  @OneToMany(
+    () => StudentOnActivity,
+    (studentOnActivity) => studentOnActivity.studentOnSchoolYear,
+  )
+  studentOnActivity: StudentOnActivity[];
 }

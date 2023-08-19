@@ -17,6 +17,8 @@ import { ProjectUserModule } from './project-user/project-user.module';
 import { QueryFailedErrorFilter } from './query-failed-error.filter';
 import { SchoolYear } from './school-year/entities/school-year.entity';
 import { SchoolYearModule } from './school-year/school-year.module';
+import { StudentOnActivity } from './student-on-activity/entities/student-on-activity.entity';
+import { StudentOnActivityModule } from './student-on-activity/student-on-activity.module';
 import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
 import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
 import { User } from './users/user.entity';
@@ -49,6 +51,7 @@ const dbModule = TypeOrmModule.forRootAsync({
       ProjectAssociate,
       Activity,
       StudentOnSchoolYear,
+      StudentOnActivity,
     ],
     synchronize: true,
     ssl: config.databaseDisableSsl() != 'true',
@@ -85,6 +88,7 @@ const classSerializerInterceptorModule = {
     ProjectAssociateModule,
     ActivityModule,
     StudentOnSchoolYearModule,
+    StudentOnActivityModule,
   ],
   controllers: [],
   providers: [

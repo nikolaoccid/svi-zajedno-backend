@@ -30,6 +30,11 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @Get('me')
+  async me(@AuthenticatedUser() user: User) {
+    return user;
+  }
+
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);

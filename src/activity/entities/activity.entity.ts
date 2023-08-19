@@ -1,6 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
+import { StudentOnActivity } from '../../student-on-activity/entities/student-on-activity.entity';
 export enum ActivityStatus {
   Active = 'active',
   Inactive = 'inactive',
@@ -28,4 +35,10 @@ export class Activity {
 
   @Column()
   projectAssociateId: number;
+
+  @OneToMany(
+    () => StudentOnActivity,
+    (studentOnActivity) => studentOnActivity.activity,
+  )
+  studentOnActivity: StudentOnActivity[];
 }
