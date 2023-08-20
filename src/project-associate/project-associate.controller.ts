@@ -1,16 +1,18 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { query } from 'express';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
@@ -44,7 +46,22 @@ export class ProjectAssociateController {
     type: String,
     required: false,
   })
-  findAll(@Query() query: { query: string }, @AuthenticatedUser() user: User) {
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    required: false,
+  })
+  findAll(
+    @Query() query: { query: string },
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @AuthenticatedUser() user: User,
+  ) {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
@@ -52,7 +69,7 @@ export class ProjectAssociateController {
       return this.projectAssociateService.findOneByQuery(query.query);
     }
 
-    return this.projectAssociateService.findAll();
+    return this.projectAssociateService.findAll({ page, limit });
   }
 
   @Get(':id')

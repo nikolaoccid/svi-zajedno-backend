@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Like, Repository } from 'typeorm';
 
+import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
 import { ProjectAssociate } from './entities/project-associate.entity';
@@ -18,8 +20,8 @@ export class ProjectAssociateService {
     );
   }
 
-  async findAll() {
-    return await this.projectAssociateRepository.find();
+  async findAll(options: IPaginationOptions) {
+    return paginate<ProjectAssociate>(this.projectAssociateRepository, options);
   }
 
   async findOne(id) {
