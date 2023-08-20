@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
 import { UpdateProjectUserDto } from './dto/update-project-user.dto';
@@ -18,6 +18,23 @@ export class ProjectUserService {
 
   async findAll() {
     return await this.projectUserRepository.find();
+  }
+
+  async findOneByQuery(query: string) {
+    return await this.projectUserRepository.find({
+      where: [
+        { oib: Like(`%${query}%`) },
+        { childName: Like(`%${query}%`) },
+        { childSurname: Like(`%${query}%`) },
+        { guardianName: Like(`%${query}%`) },
+        { guardianSurname: Like(`%${query}%`) },
+        { email: Like(`%${query}%`) },
+        { mobilePhone: Like(`%${query}%`) },
+        { school: Like(`%${query}%`) },
+        { address: Like(`%${query}%`) },
+        { city: Like(`%${query}%`) },
+      ],
+    });
   }
 
   async findOne(id: number) {

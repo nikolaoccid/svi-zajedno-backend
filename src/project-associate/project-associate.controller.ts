@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { query } from 'express';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
@@ -37,10 +39,19 @@ export class ProjectAssociateController {
   }
 
   @Get()
-  findAll(@AuthenticatedUser() user: User) {
+  @ApiQuery({
+    name: 'query',
+    type: String,
+    required: false,
+  })
+  findAll(@Query() query: { query: string }, @AuthenticatedUser() user: User) {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
+    if (query.query) {
+      return this.projectAssociateService.findOneByQuery(query.query);
+    }
+
     return this.projectAssociateService.findAll();
   }
 
