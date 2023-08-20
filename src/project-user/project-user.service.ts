@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Like, Repository } from 'typeorm';
 
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
@@ -16,8 +17,8 @@ export class ProjectUserService {
     return await this.projectUserRepository.save(createProjectUserDto);
   }
 
-  async findAll() {
-    return await this.projectUserRepository.find();
+  async findAll(options: IPaginationOptions) {
+    return paginate<ProjectUser>(this.projectUserRepository, options);
   }
 
   async findOneByQuery(query: string) {
