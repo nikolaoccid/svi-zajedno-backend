@@ -12,7 +12,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
@@ -61,7 +61,9 @@ export class ProjectAssociateController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
     @AuthenticatedUser() user: User,
-  ) {
+  ):
+    | Promise<ProjectAssociate[]>
+    | Promise<Pagination<ProjectAssociate, IPaginationMeta>> {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
