@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
+import { SchoolYear } from '../../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../../student-on-activity/entities/student-on-activity.entity';
 export enum ActivityStatus {
   Active = 'active',
@@ -41,4 +42,9 @@ export class Activity {
     (studentOnActivity) => studentOnActivity.activity,
   )
   studentOnActivity: StudentOnActivity[];
+
+  @ManyToOne(() => SchoolYear, (schoolYear) => schoolYear.activity)
+  schoolYear: SchoolYear;
+  @Column()
+  schoolYearId: number;
 }

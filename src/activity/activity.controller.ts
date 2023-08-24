@@ -15,6 +15,7 @@ import { User, UserRole } from '../users/user.entity';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
+import { Activity } from './entities/activity.entity';
 
 @Controller('activity')
 @ApiBearerAuth()
@@ -26,7 +27,7 @@ export class ActivityController {
   create(
     @Body() createActivityDto: CreateActivityDto,
     @AuthenticatedUser() user: User,
-  ) {
+  ): Promise<Activity> {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
