@@ -63,24 +63,32 @@ export class StudentOnActivityService {
   private async schoolYearMatch(
     studentOnActivity: CreateStudentOnActivityDto | UpdateStudentOnActivityDto,
   ) {
-    const activity = await this.activityService.findOne(
+    const activitySchoolYear = await this.activitySchoolYear(
       studentOnActivity.activityId,
     );
-
-    const studentOnSchoolYear = await this.studentOnSchoolYearService.findOne(
+    const studentOnSchoolYearschoolYear = await this.studentOnSchoolYear(
       studentOnActivity.studentOnSchoolYearId,
     );
 
-    const studentOnSchoolYearschoolYear = await this.schoolYearService.getById(
-      studentOnSchoolYear.schoolYearId,
-    );
+    return activitySchoolYear === studentOnSchoolYearschoolYear;
+  }
 
-    const activitySchoolYear = await this.schoolYearService.getById(
+  private async activitySchoolYear(activityId: number) {
+    const activity = await this.activityService.findOne(activityId);
+
+    const { startYear } = await this.schoolYearService.getById(
       activity.schoolYearId,
     );
+    return startYear;
+  }
 
-    return (
-      studentOnSchoolYearschoolYear.startYear === activitySchoolYear.startYear
+  private async studentOnSchoolYear(studentOnSchoolYearId: number) {
+    const studentOnSchoolYear = await this.studentOnSchoolYearService.findOne(
+      studentOnSchoolYearId,
     );
+    const { startYear } = await this.schoolYearService.getById(
+      studentOnSchoolYear.schoolYearId,
+    );
+    return startYear;
   }
 }
