@@ -1,27 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateStudentOnActivityDto } from './dto/create-student-on-activity.dto';
 import { UpdateStudentOnActivityDto } from './dto/update-student-on-activity.dto';
+import { StudentOnActivity } from './entities/student-on-activity.entity';
 
 @Injectable()
 export class StudentOnActivityService {
-  create(createStudentOnActivityDto: CreateStudentOnActivityDto) {
-    return 'This action adds a new studentOnActivity';
+  constructor(
+    @InjectRepository(StudentOnActivity)
+    private studentOnActivity: Repository<StudentOnActivity>,
+  ) {}
+  async create(createStudentOnActivityDto: CreateStudentOnActivityDto) {
+    return await this.studentOnActivity.save(createStudentOnActivityDto);
   }
 
-  findAll() {
-    return `This action returns all studentOnActivity`;
+  async findAll() {
+    return await this.studentOnActivity.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} studentOnActivity`;
+  async findOne(id: number) {
+    return await this.studentOnActivity.findOneBy({ id });
   }
 
-  update(id: number, updateStudentOnActivityDto: UpdateStudentOnActivityDto) {
-    return `This action updates a #${id} studentOnActivity`;
+  async update(
+    id: number,
+    updateStudentOnActivityDto: UpdateStudentOnActivityDto,
+  ) {
+    const result = await this.studentOnActivity.update(
+      id,
+      updateStudentOnActivityDto,
+    );
+
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
+    return await this.studentOnActivity.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} studentOnActivity`;
+  async remove(id: number) {
+    const student = await this.findOne(id);
+    return await this.studentOnActivity.remove(student);
   }
 }
