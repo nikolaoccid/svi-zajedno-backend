@@ -9,5 +9,6 @@ import { StudentOnSchoolYearService } from './student-on-school-year.service';
   imports: [TypeOrmModule.forFeature([StudentOnSchoolYear])],
   controllers: [StudentOnSchoolYearController],
   providers: [StudentOnSchoolYearService],
+  exports: [StudentOnSchoolYearService],
 })
 export class StudentOnSchoolYearModule {}
