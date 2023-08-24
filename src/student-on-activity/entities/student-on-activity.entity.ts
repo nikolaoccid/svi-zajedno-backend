@@ -11,6 +11,7 @@ export enum ActivityStatus {
 export class StudentOnActivity {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   activityStatus: ActivityStatus;
 
@@ -19,6 +20,8 @@ export class StudentOnActivity {
     (studentOnSchoolYear) => studentOnSchoolYear.studentOnActivity,
   )
   studentOnSchoolYear: StudentOnSchoolYear;
+  @Column()
+  studentOnSchoolYearId: number;
 
   @ManyToOne(() => Activity, (activity) => activity.studentOnActivity)
   activity: Activity;
