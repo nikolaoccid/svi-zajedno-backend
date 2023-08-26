@@ -20,6 +20,13 @@ export class StudentOnSchoolYearService {
     return await this.studentOnSchoolYear.find();
   }
 
+  async findAllBySchoolYearAndUser(userId, schoolYearId) {
+    return await this.studentOnSchoolYear.find({
+      where: { userId: userId, schoolYearId: schoolYearId },
+      relations: ['schoolYear', 'user'],
+    });
+  }
+
   async findOne(id: number) {
     return await this.studentOnSchoolYear.findOneBy({ id });
   }
