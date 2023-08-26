@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Like, Repository } from 'typeorm';
 
-import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
 import { ProjectAssociate } from './entities/project-associate.entity';
@@ -27,7 +26,7 @@ export class ProjectAssociateService {
   async findOne(id) {
     return await this.projectAssociateRepository.findOne({
       where: { id: id },
-      relations: ['activity'],
+      relations: ['activity', 'category'],
     });
   }
 
