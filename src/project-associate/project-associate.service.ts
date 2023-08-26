@@ -25,7 +25,10 @@ export class ProjectAssociateService {
   }
 
   async findOne(id) {
-    return await this.projectAssociateRepository.findOneBy({ id });
+    return await this.projectAssociateRepository.findOne({
+      where: { id: id },
+      relations: ['activity'],
+    });
   }
 
   async findOneByQuery(query: string) {
