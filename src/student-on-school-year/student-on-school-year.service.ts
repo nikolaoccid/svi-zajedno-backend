@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -13,6 +17,13 @@ export class StudentOnSchoolYearService {
     private studentOnSchoolYear: Repository<StudentOnSchoolYear>,
   ) {}
   async create(createStudentOnSchoolYearDto: CreateStudentOnSchoolYearDto) {
+    const record = await this.findAllBySchoolYearAndUser(
+      createStudentOnSchoolYearDto.userId,
+      createStudentOnSchoolYearDto.schoolYearId,
+    );
+    if (record.length > 0) {
+      throw new BadRequestException();
+    }
     return await this.studentOnSchoolYear.save(createStudentOnSchoolYearDto);
   }
 
