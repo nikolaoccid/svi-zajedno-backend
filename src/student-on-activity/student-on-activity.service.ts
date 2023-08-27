@@ -33,6 +33,17 @@ export class StudentOnActivityService {
     return await this.studentOnActivity.find();
   }
 
+  async findAllByStudentOnSchoolYear(studentOnSchoolYearId: number) {
+    return await this.studentOnActivity.find({
+      where: [{ studentOnSchoolYear: { id: studentOnSchoolYearId } }],
+      relations: [
+        'activity',
+        'studentOnSchoolYear',
+        'activity.projectAssociate',
+      ],
+    });
+  }
+
   async findOne(id: number) {
     return await this.studentOnActivity.findOneBy({ id });
   }

@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
@@ -36,11 +39,26 @@ export class StudentOnActivityController {
   }
 
   @Get()
-  findAll(@AuthenticatedUser() user: User) {
+  @ApiQuery({
+    name: 'studentOnSchoolYearId',
+    type: Number,
+    required: false,
+  })
+  findAll(
+    @AuthenticatedUser() user: User,
+    @Query('studentOnSchoolYearId', new DefaultValuePipe(0), ParseIntPipe)
+    studentOnSchoolYearId = 0,
+  ) {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
-    return this.studentOnActivityService.findAll();
+    if (studentOnSchoolYearId) {
+      return this.studentOnActivityService.findAllByStudentOnSchoolYear(
+        studentOnSchoolYearId,
+      );
+    } else {
+      return this.studentOnActivityService.findAll();
+    }
   }
 
   @Get(':id')
