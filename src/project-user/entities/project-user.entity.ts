@@ -1,6 +1,19 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+}
+export enum SourceSystem {
+  CZSS = 'czss',
+  OBITELJSKICENTAR = 'obiteljskicentar',
+}
+export enum ProtectionType {
+  ZMN = 'zmn',
+  PREPORUKA = 'preporuka',
+  UDOMITELJSTVO = 'udomiteljstvo',
+}
 
 @Entity()
 export class ProjectUser {
@@ -9,6 +22,15 @@ export class ProjectUser {
 
   @Column({ unique: true })
   oib: string;
+
+  @Column()
+  gender: Gender;
+
+  @Column()
+  sourceSystem: SourceSystem;
+
+  @Column()
+  protectionType: ProtectionType;
 
   @Column()
   guardianName: string;
