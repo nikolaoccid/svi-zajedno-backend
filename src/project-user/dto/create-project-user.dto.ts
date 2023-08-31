@@ -1,9 +1,31 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
+
+import {
+  Gender,
+  ProtectionType,
+  SourceSystem,
+} from '../entities/project-user.entity';
 
 export class CreateProjectUserDto {
   @IsNotEmpty()
   @IsString()
+  @Length(11, 11)
   oib: string;
+
+  @IsNotEmpty()
+  gender: Gender;
+
+  @IsNotEmpty()
+  sourceSystem: SourceSystem;
+
+  @IsNotEmpty()
+  protectionType: ProtectionType;
 
   @IsNotEmpty()
   @IsString()
