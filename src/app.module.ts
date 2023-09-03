@@ -17,6 +17,7 @@ import { ProjectUserModule } from './project-user/project-user.module';
 import { QueryFailedErrorFilter } from './query-failed-error.filter';
 import { SchoolYear } from './school-year/entities/school-year.entity';
 import { SchoolYearModule } from './school-year/school-year.module';
+import { StatisticsModule } from './statistics/statistics.module';
 import { StudentOnActivity } from './student-on-activity/entities/student-on-activity.entity';
 import { StudentOnActivityModule } from './student-on-activity/student-on-activity.module';
 import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
@@ -89,6 +90,7 @@ const classSerializerInterceptorModule = {
     ActivityModule,
     StudentOnSchoolYearModule,
     StudentOnActivityModule,
+    StatisticsModule,
   ],
   controllers: [],
   providers: [
