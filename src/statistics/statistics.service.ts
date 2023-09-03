@@ -102,7 +102,10 @@ export class StatisticsService {
     const users = await this.projectUserRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.studentOnSchoolYear', 'studentOnSchoolYear')
-      .leftJoin('studentOnSchoolYear.studentOnActivity', 'studentOnActivity')
+      .leftJoinAndSelect(
+        'studentOnSchoolYear.studentOnActivity',
+        'studentOnActivity',
+      )
       .where('studentOnSchoolYear.schoolYearId = :schoolYearId', {
         schoolYearId,
       })
@@ -110,6 +113,8 @@ export class StatisticsService {
 
     const statistics = {
       totalUsers: users.length,
+      maleUsers: 0,
+      femaleUsers: 0,
       activeUsers: 0,
       inactiveUsers: 0,
       pendingUsers: 0,
@@ -121,45 +126,57 @@ export class StatisticsService {
       },
       sourceSystems: {},
       protectionTypes: {},
-      freeActivityUsers: 0,
-      paidActivityUsers: 0,
-      maleUsers: 0, // Add a new field for males
-      femaleUsers: 0, // Add a new field for females
+
+      activeActivities: 0,
+      inactiveActivities: 0,
+      pendingActivities: 0,
+      totalActivities: 0,
     };
 
     for (const user of users) {
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
-        // Calculate age group
-        const age = this.calculateAge(user.dateOfBirth);
-        if (age < 6) {
-          statistics.ageGroups.under6++;
-        } else if (age >= 7 && age <= 12) {
-          statistics.ageGroups.age7to12++;
-        } else if (age >= 13 && age <= 18) {
-          statistics.ageGroups.age13to18++;
-        } else if (age >= 19 && age <= 24) {
-          statistics.ageGroups.age19to24++;
-        }
+        for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
+          // Calculate age group
+          const age = this.calculateAge(user.dateOfBirth);
+          if (age < 6) {
+            statistics.ageGroups.under6++;
+          } else if (age >= 7 && age <= 12) {
+            statistics.ageGroups.age7to12++;
+          } else if (age >= 13 && age <= 18) {
+            statistics.ageGroups.age13to18++;
+          } else if (age >= 19 && age <= 24) {
+            statistics.ageGroups.age19to24++;
+          }
 
-        // Count male and female users
-        if (user.gender === 'male') {
-          statistics.maleUsers++;
-        } else if (user.gender === 'female') {
-          statistics.femaleUsers++;
-        }
+          // Count male and female users
+          if (user.gender === 'male') {
+            statistics.maleUsers++;
+          } else if (user.gender === 'female') {
+            statistics.femaleUsers++;
+          }
 
-        // Count enum values
-        statistics.sourceSystems[user.sourceSystem] =
-          (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
-        statistics.protectionTypes[user.protectionType] =
-          (statistics.protectionTypes[user.protectionType] || 0) + 1;
+          // Count enum values
+          statistics.sourceSystems[user.sourceSystem] =
+            (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
+          statistics.protectionTypes[user.protectionType] =
+            (statistics.protectionTypes[user.protectionType] || 0) + 1;
 
-        if (studentOnSchoolYear.status === 'active') {
-          statistics.activeUsers++;
-        } else if (studentOnSchoolYear.status === 'inactive') {
-          statistics.inactiveUsers++;
-        } else if (studentOnSchoolYear.status === 'pending') {
-          statistics.pendingUsers++;
+          if (studentOnSchoolYear.status === 'active') {
+            statistics.activeUsers++;
+          } else if (studentOnSchoolYear.status === 'inactive') {
+            statistics.inactiveUsers++;
+          } else if (studentOnSchoolYear.status === 'pending') {
+            statistics.pendingUsers++;
+          }
+
+          if (studentOnActivity.activityStatus === 'active') {
+            statistics.activeActivities++;
+          } else if (studentOnActivity.activityStatus === 'inactive') {
+            statistics.inactiveActivities++;
+          } else if (studentOnActivity.activityStatus === 'pending') {
+            statistics.pendingActivities++;
+          }
+          statistics.totalActivities++;
         }
       }
     }
