@@ -30,7 +30,13 @@ export class StudentOnActivityService {
   }
 
   async findAll() {
-    return await this.studentOnActivity.find();
+    return await this.studentOnActivity.find({
+      relations: [
+        'activity',
+        'studentOnSchoolYear',
+        'activity.projectAssociate',
+      ],
+    });
   }
 
   async findAllByStudentOnSchoolYear(studentOnSchoolYearId: number) {

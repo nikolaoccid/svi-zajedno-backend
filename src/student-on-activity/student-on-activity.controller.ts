@@ -52,7 +52,7 @@ export class StudentOnActivityController {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
-    if (studentOnSchoolYearId) {
+    if (studentOnSchoolYearId !== 0) {
       return this.studentOnActivityService.findAllByStudentOnSchoolYear(
         studentOnSchoolYearId,
       );

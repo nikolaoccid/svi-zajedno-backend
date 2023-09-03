@@ -23,13 +23,13 @@ export class ProjectUser {
   @Column({ unique: true })
   oib: string;
 
-  @Column()
+  @Column({ default: Gender.Male })
   gender: Gender;
 
-  @Column()
+  @Column({ default: SourceSystem.CZSS })
   sourceSystem: SourceSystem;
 
-  @Column()
+  @Column({ default: ProtectionType.PREPORUKA })
   protectionType: ProtectionType;
 
   @Column()
