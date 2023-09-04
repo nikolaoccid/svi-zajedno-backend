@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Activity } from '../activity/entities/activity.entity';
-import { CategoryModule } from '../category/category.module';
 import { Category } from '../category/entities/category.entity';
 import { ProjectAssociate } from '../project-associate/entities/project-associate.entity';
 import { ProjectUser } from '../project-user/entities/project-user.entity';
