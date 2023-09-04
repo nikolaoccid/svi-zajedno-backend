@@ -116,8 +116,6 @@ export class StatisticsService {
       })
       .getMany();
 
-    console.log('getProjectUserStatistics -> users length', users.length);
-
     const statistics = {
       totalUsers: users.length,
       maleUsers: 0,
@@ -141,39 +139,36 @@ export class StatisticsService {
     };
 
     for (const user of users) {
+      const age = this.calculateAge(user.dateOfBirth);
+      if (age < 6) {
+        statistics.ageGroups.under6++;
+      } else if (age >= 7 && age <= 12) {
+        statistics.ageGroups.age7to12++;
+      } else if (age >= 13 && age <= 18) {
+        statistics.ageGroups.age13to18++;
+      } else if (age >= 19 && age <= 24) {
+        statistics.ageGroups.age19to24++;
+      }
+
+      if (user.gender === 'male') {
+        statistics.maleUsers++;
+      } else if (user.gender === 'female') {
+        statistics.femaleUsers++;
+      }
+
+      statistics.sourceSystems[user.sourceSystem] =
+        (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
+      statistics.protectionTypes[user.protectionType] =
+        (statistics.protectionTypes[user.protectionType] || 0) + 1;
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
-        console.log('studentOnSchoolYear', studentOnSchoolYear);
+        if (studentOnSchoolYear.status === 'active') {
+          statistics.activeUsers++;
+        } else if (studentOnSchoolYear.status === 'inactive') {
+          statistics.inactiveUsers++;
+        } else if (studentOnSchoolYear.status === 'pending') {
+          statistics.pendingUsers++;
+        }
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
-          const age = this.calculateAge(user.dateOfBirth);
-          if (age < 6) {
-            statistics.ageGroups.under6++;
-          } else if (age >= 7 && age <= 12) {
-            statistics.ageGroups.age7to12++;
-          } else if (age >= 13 && age <= 18) {
-            statistics.ageGroups.age13to18++;
-          } else if (age >= 19 && age <= 24) {
-            statistics.ageGroups.age19to24++;
-          }
-
-          if (user.gender === 'male') {
-            statistics.maleUsers++;
-          } else if (user.gender === 'female') {
-            statistics.femaleUsers++;
-          }
-
-          statistics.sourceSystems[user.sourceSystem] =
-            (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
-          statistics.protectionTypes[user.protectionType] =
-            (statistics.protectionTypes[user.protectionType] || 0) + 1;
-
-          if (studentOnSchoolYear.status === 'active') {
-            statistics.activeUsers++;
-          } else if (studentOnSchoolYear.status === 'inactive') {
-            statistics.inactiveUsers++;
-          } else if (studentOnSchoolYear.status === 'pending') {
-            statistics.pendingUsers++;
-          }
-
           if (studentOnActivity.activityStatus === 'active') {
             statistics.activeActivities++;
           } else if (studentOnActivity.activityStatus === 'inactive') {
