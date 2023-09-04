@@ -33,6 +33,11 @@ export class ActivityController {
     required: false,
   })
   @ApiQuery({
+    name: 'studentOnSchoolYearId',
+    type: Number,
+    required: false,
+  })
+  @ApiQuery({
     name: 'query',
     type: String,
     required: false,
@@ -47,6 +52,8 @@ export class ActivityController {
     @Query() query: { query: string },
     @Query('schoolYearId', new DefaultValuePipe(0), ParseIntPipe)
     schoolYearId = 0,
+    @Query('studentOnSchoolYearId', new DefaultValuePipe(0), ParseIntPipe)
+    studentOnSchoolYearId = 0,
     @Query('activityStatus') activityStatus: ActivityStatus,
   ) {
     if (user.role !== UserRole.Admin) {
@@ -55,12 +62,14 @@ export class ActivityController {
     if (
       schoolYearId !== 0 ||
       query.query !== undefined ||
-      activityStatus !== undefined
+      activityStatus !== undefined ||
+      studentOnSchoolYearId !== 0
     ) {
       return this.activityService.findAllActiveActivitiesBySchoolYearAndQuery(
         query.query,
         schoolYearId,
         activityStatus,
+        studentOnSchoolYearId,
       );
     } else {
       return this.activityService.findAll();

@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Not, Repository } from 'typeorm';
 
+import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 import { Activity, ActivityStatus } from './entities/activity.entity';
@@ -11,6 +12,8 @@ export class ActivityService {
   constructor(
     @InjectRepository(Activity)
     private activityRepository: Repository<Activity>,
+    @InjectRepository(StudentOnSchoolYear)
+    private studentOnSchoolYearRepository: Repository<StudentOnSchoolYear>,
   ) {}
   async create(createActivityDto: CreateActivityDto) {
     return await this.activityRepository.save(createActivityDto);
@@ -26,31 +29,60 @@ export class ActivityService {
     query: string,
     schoolYearId: number,
     activityStatus: ActivityStatus,
+    studentOnSchoolYearId: number,
   ) {
-    if (query && schoolYearId && activityStatus) {
+    if (query && schoolYearId && activityStatus && studentOnSchoolYearId) {
+      const studentOnSchoolYear =
+        await this.studentOnSchoolYearRepository.findOneOrFail({
+          where: { id: studentOnSchoolYearId },
+          relations: ['studentOnActivity'],
+        });
+
+      const activityIds = studentOnSchoolYear.studentOnActivity.map(
+        (studentOnActivity) => studentOnActivity.activityId,
+      );
+
       return await this.activityRepository.find({
         where: [
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
             activityName: Like(`%${query}%`),
+            id: Not(In(activityIds)),
           },
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
             projectAssociate: { clubName: Like(`%${query}%`) },
+            id: Not(In(activityIds)),
           },
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
             projectAssociate: { email: Like(`%${query}%`) },
+            id: Not(In(activityIds)),
           },
         ],
         relations: ['projectAssociate', 'schoolYear'],
       });
-    } else if (schoolYearId && activityStatus) {
+    } else if (schoolYearId && activityStatus && studentOnSchoolYearId) {
+      const studentOnSchoolYear =
+        await this.studentOnSchoolYearRepository.findOne({
+          where: { id: studentOnSchoolYearId },
+          relations: ['studentOnActivity'],
+        });
+
+      const activityIds = studentOnSchoolYear
+        ? studentOnSchoolYear.studentOnActivity.map(
+            (studentOnActivity) => studentOnActivity.activityId,
+          )
+        : [];
       return await this.activityRepository.find({
-        where: { schoolYearId: schoolYearId, activityStatus: activityStatus },
+        where: {
+          schoolYearId: schoolYearId,
+          activityStatus: activityStatus,
+          id: Not(In(activityIds)),
+        },
         relations: ['projectAssociate', 'schoolYear'],
       });
     } else if (query) {

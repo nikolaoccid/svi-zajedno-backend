@@ -12,15 +12,11 @@ export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get('/project-associates/:schoolYearId')
-  projectAssociateStatistics(
-    @Param('schoolYearId') schoolYearId: string,
-  ): Promise<ProjectAssociatesStatistics[]> {
+  projectAssociateStatistics(@Param('schoolYearId') schoolYearId: string) {
     return this.statisticsService.getProjectAssociatesStatistics(+schoolYearId);
   }
   @Get('/project-users/:schoolYearId')
-  projectUsersStatistics(
-    @Param('schoolYearId') schoolYearId: string,
-  ): Promise<ProjectUserStatistics> {
+  projectUsersStatistics(@Param('schoolYearId') schoolYearId: string) {
     return this.statisticsService.getProjectUserStatistics(+schoolYearId);
   }
 }
