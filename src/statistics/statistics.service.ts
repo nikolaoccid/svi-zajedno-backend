@@ -31,20 +31,23 @@ export class StatisticsService {
   async getProjectAssociatesStatistics(
     schoolYearId: number,
   ): Promise<ProjectAssociatesStatistics[]> {
-    // Fetch all categories
     const categories = await this.categoryRepository.find();
 
     const statistics: ProjectAssociatesStatistics[] = [];
 
     for (const category of categories) {
-      // Count project associates in the category
       const projectAssociatesCount =
         await this.projectAssociateRepository.count({
-          where: { category },
+          where: {
+            category: category,
+            activity: { schoolYear: { id: schoolYearId } },
+          },
         });
 
       const totalProjectAssociatesCount =
-        await this.projectAssociateRepository.count();
+        await this.projectAssociateRepository.count({
+          where: { activity: { schoolYear: { id: schoolYearId } } },
+        });
 
       // Count free activities in the category
       const freeActivitiesCount = await this.activityRepository.count({
@@ -119,6 +122,8 @@ export class StatisticsService {
       })
       .getMany();
 
+    console.log('getProjectUserStatistics -> users length', users.length);
+
     const statistics: ProjectUserStatistics = {
       totalUsers: users.length,
       maleUsers: 0,
@@ -143,6 +148,7 @@ export class StatisticsService {
 
     for (const user of users) {
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
+        console.log('studentOnSchoolYear', studentOnSchoolYear);
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
           const age = this.calculateAge(user.dateOfBirth);
           if (age < 6) {
@@ -189,19 +195,36 @@ export class StatisticsService {
     return statistics;
   }
 
-  private calculateAge(dateOfBirth: string): number {
-    const birthDate = new Date(dateOfBirth);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
+  private calculateAge(dateString) {
+    const dateParts = dateString.split('.');
 
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
+    if (dateParts.length !== 3) {
+      throw new Error('Date is not in good format');
     }
 
-    return age;
+    const day = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10);
+    const year = parseInt(dateParts[2], 10);
+
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+      throw new Error('Date is not in good format');
+    }
+
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+
+    if (isNaN(birthDate.getTime())) {
+      throw new Error('Date is not in good format');
+    }
+
+    const yearsDiff = today.getFullYear() - birthDate.getFullYear();
+    const monthsDiff = today.getMonth() - birthDate.getMonth();
+    const daysDiff = today.getDate() - birthDate.getDate();
+
+    if (monthsDiff < 0 || (monthsDiff === 0 && daysDiff < 0)) {
+      return yearsDiff - 1;
+    }
+
+    return yearsDiff;
   }
 }
