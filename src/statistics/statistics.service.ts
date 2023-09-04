@@ -30,7 +30,6 @@ export class StatisticsService {
     // Fetch all categories
     const categories = await this.categoryRepository.find();
 
-    // Initialize the statistics result
     const statistics = [];
 
     for (const category of categories) {
@@ -40,11 +39,14 @@ export class StatisticsService {
           where: { category },
         });
 
+      const totalProjectAssociatesCount =
+        await this.projectAssociateRepository.count();
+
       // Count free activities in the category
       const freeActivitiesCount = await this.activityRepository.count({
         where: {
           projectAssociate: { category },
-          activityPrice: 0, // Assuming 0 represents free activities
+          activityPrice: 0,
           schoolYear: { id: schoolYearId },
         },
       });
@@ -53,7 +55,7 @@ export class StatisticsService {
       const paidActivitiesCount = await this.activityRepository.count({
         where: {
           projectAssociate: { category },
-          activityPrice: MoreThan(0), // Assuming 0 represents free activities
+          activityPrice: MoreThan(0),
           schoolYear: { id: schoolYearId },
         },
       });
@@ -64,7 +66,7 @@ export class StatisticsService {
           where: {
             activity: {
               projectAssociate: { category },
-              activityPrice: 0, // Assuming 0 represents free activities
+              activityPrice: 0,
               schoolYear: { id: schoolYearId },
             },
           },
@@ -76,16 +78,16 @@ export class StatisticsService {
           where: {
             activity: {
               projectAssociate: { category },
-              activityPrice: MoreThan(0), // Assuming 0 represents free activities
+              activityPrice: MoreThan(0),
               schoolYear: { id: schoolYearId },
             },
           },
         });
 
-      // Create a statistics object for this category
       const categoryStatistics = {
+        totalAssociates: totalProjectAssociatesCount,
+        totalAssociatesPerCategory: projectAssociatesCount,
         categoryName: category.categoryName,
-        totalAssociates: projectAssociatesCount,
         totalFreeActivities: freeActivitiesCount,
         totalPaidActivities: paidActivitiesCount,
         usersAttendingFreeActivities,
@@ -136,7 +138,6 @@ export class StatisticsService {
     for (const user of users) {
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
-          // Calculate age group
           const age = this.calculateAge(user.dateOfBirth);
           if (age < 6) {
             statistics.ageGroups.under6++;
@@ -148,14 +149,12 @@ export class StatisticsService {
             statistics.ageGroups.age19to24++;
           }
 
-          // Count male and female users
           if (user.gender === 'male') {
             statistics.maleUsers++;
           } else if (user.gender === 'female') {
             statistics.femaleUsers++;
           }
 
-          // Count enum values
           statistics.sourceSystems[user.sourceSystem] =
             (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
           statistics.protectionTypes[user.protectionType] =
@@ -184,7 +183,6 @@ export class StatisticsService {
     return statistics;
   }
 
-  // Helper function to calculate age
   private calculateAge(dateOfBirth: string): number {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
