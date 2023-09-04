@@ -8,8 +8,6 @@ import { ProjectAssociate } from '../project-associate/entities/project-associat
 import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
-import { ProjectAssociatesStatistics } from './dto/project-associate.dto';
-import { ProjectUserStatistics } from './dto/project-user.dto';
 
 @Injectable()
 export class StatisticsService {
@@ -28,12 +26,10 @@ export class StatisticsService {
     private readonly projectUserRepository: Repository<ProjectUser>,
   ) {}
 
-  async getProjectAssociatesStatistics(
-    schoolYearId: number,
-  ): Promise<ProjectAssociatesStatistics[]> {
+  async getProjectAssociatesStatistics(schoolYearId: number) {
     const categories = await this.categoryRepository.find();
 
-    const statistics: ProjectAssociatesStatistics[] = [];
+    const statistics = [];
 
     for (const category of categories) {
       const projectAssociatesCount =
@@ -91,7 +87,7 @@ export class StatisticsService {
           },
         });
 
-      const categoryStatistics: ProjectAssociatesStatistics = {
+      const categoryStatistics = {
         totalAssociates: totalProjectAssociatesCount,
         totalAssociatesPerCategory: projectAssociatesCount,
         categoryName: category.categoryName,
@@ -107,9 +103,7 @@ export class StatisticsService {
     return statistics;
   }
 
-  async getProjectUserStatistics(
-    schoolYearId: number,
-  ): Promise<ProjectUserStatistics> {
+  async getProjectUserStatistics(schoolYearId: number) {
     const users = await this.projectUserRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.studentOnSchoolYear', 'studentOnSchoolYear')
@@ -124,7 +118,7 @@ export class StatisticsService {
 
     console.log('getProjectUserStatistics -> users length', users.length);
 
-    const statistics: ProjectUserStatistics = {
+    const statistics = {
       totalUsers: users.length,
       maleUsers: 0,
       femaleUsers: 0,
