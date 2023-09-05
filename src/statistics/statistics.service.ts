@@ -111,6 +111,7 @@ export class StatisticsService {
         'studentOnSchoolYear.studentOnActivity',
         'studentOnActivity',
       )
+      .leftJoinAndSelect('studentOnActivity.activity', 'activity')
       .where('studentOnSchoolYear.schoolYearId = :schoolYearId', {
         schoolYearId,
       })
@@ -136,6 +137,7 @@ export class StatisticsService {
       inactiveActivities: 0,
       pendingActivities: 0,
       totalActivities: 0,
+      totalProjectValue: 0,
     };
 
     for (const user of users) {
@@ -171,8 +173,12 @@ export class StatisticsService {
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
           if (studentOnActivity.activityStatus === 'active') {
             statistics.activeActivities++;
+            statistics.totalProjectValue +=
+              studentOnActivity.activity.activityPrice * 10;
           } else if (studentOnActivity.activityStatus === 'inactive') {
             statistics.inactiveActivities++;
+            statistics.totalProjectValue +=
+              studentOnActivity.activity.activityPrice;
           } else if (studentOnActivity.activityStatus === 'pending') {
             statistics.pendingActivities++;
           }
