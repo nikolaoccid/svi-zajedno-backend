@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as process from 'process';
 
 @Injectable()
 export class Config {
@@ -9,14 +10,25 @@ export class Config {
     }
   }
 
-  databaseHost = () => this.config.getOrThrow<string>('DATABASE_HOST');
+  databaseHost = () =>
+    process.env.DATABASE_HOST ?? this.config.get<string>('DATABASE_HOST');
   databasePort = () =>
-    parseInt(this.config.getOrThrow<string>('DATABASE_PORT'));
-  databaseUsername = () => this.config.getOrThrow<string>('DATABASE_USERNAME');
-  databasePassword = () => this.config.getOrThrow<string>('DATABASE_PASSWORD');
-  databaseName = () => this.config.getOrThrow<string>('DATABASE_NAME');
-  sessionSecret = () => this.config.getOrThrow<string>('SESSION_SECRET');
-  jwtSecret = () => this.config.getOrThrow<string>('JWT_SECRET');
+    parseInt(
+      process.env.DATABASE_PORT ?? this.config.get<string>('DATABASE_PORT'),
+    );
+  databaseUsername = () =>
+    process.env.DATABASE_USERNAME ??
+    this.config.get<string>('DATABASE_USERNAME');
+  databasePassword = () =>
+    process.env.DATABASE_PASSWORD ??
+    this.config.get<string>('DATABASE_PASSWORD');
+  databaseName = () =>
+    process.env.DATABASE_NAME ?? this.config.get<string>('DATABASE_NAME');
+  sessionSecret = () =>
+    process.env.SESSION_SECRET ?? this.config.get<string>('SESSION_SECRET');
+  jwtSecret = () =>
+    process.env.JWT_SECRET ?? this.config.get<string>('JWT_SECRET');
   databaseDisableSsl = () =>
-    this.config.getOrThrow<string>('DATABASE_DISABLE_SSL');
+    process.env.DATABASE_DISABLE_SSL ??
+    this.config.get<string>('DATABASE_DISABLE_SSL');
 }
