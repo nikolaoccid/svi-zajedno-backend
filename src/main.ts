@@ -16,8 +16,8 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('Svi zajedno backend')
-    .setDescription('Backend application for Svi zajedno project')
+    .setTitle('Activity Tracker backend')
+    .setDescription('Backend application for Activity Tracker')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
