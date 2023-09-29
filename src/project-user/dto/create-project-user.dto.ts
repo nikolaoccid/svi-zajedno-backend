@@ -59,7 +59,6 @@ export class CreateProjectUserDto {
   @IsString()
   mobilePhone: string;
 
-  @IsNotEmpty()
-  @IsEmail()
+  @IsOptional()
   email: string;
 }
