@@ -54,7 +54,7 @@ const dbModule = TypeOrmModule.forRootAsync({
       StudentOnSchoolYear,
       StudentOnActivity,
     ],
-    synchronize: false,
+    synchronize: config.synchronize() === 'true',
     ssl: config.databaseDisableSsl() != 'true',
     namingStrategy: new SnakeNamingStrategy(),
   }),
