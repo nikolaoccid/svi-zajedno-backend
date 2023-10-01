@@ -31,4 +31,6 @@ export class Config {
   databaseDisableSsl = () =>
     process.env.DATABASE_DISABLE_SSL ??
     this.config.get<string>('DATABASE_DISABLE_SSL');
+  synchronize = () =>
+    process.env.SYNCHRONIZE ?? this.config.get<string>('SYNCHRONIZE');
 }
