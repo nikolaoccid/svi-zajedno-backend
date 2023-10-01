@@ -12,7 +12,9 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
   async create(categoryDto: CategoryDto) {
-    return await this.categoryRepository.save(categoryDto);
+    return await this.categoryRepository.save({
+      categoryName: this.capitalizeCategoryName(categoryDto.categoryName),
+    });
   }
 
   async findAll() {
@@ -24,7 +26,10 @@ export class CategoryService {
   }
 
   async update(id: number, categoryDto: CategoryDto) {
-    const result = await this.categoryRepository.update(id, categoryDto);
+    const result = await this.categoryRepository.update(id, {
+      categoryName: this.capitalizeCategoryName(categoryDto.categoryName),
+      ...categoryDto,
+    });
     if (result.affected === 0) {
       throw new NotFoundException();
     }
@@ -34,5 +39,13 @@ export class CategoryService {
   async remove(id: number) {
     const category = await this.findOne(id);
     return await this.categoryRepository.remove(category);
+  }
+
+  private capitalizeCategoryName(categoryName: string) {
+    const lowercaseCategoryName = categoryName.toLowerCase();
+    return (
+      [...lowercaseCategoryName][0].toUpperCase() +
+      [...lowercaseCategoryName].slice(1).join('')
+    );
   }
 }

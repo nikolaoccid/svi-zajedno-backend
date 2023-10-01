@@ -5,15 +5,6 @@ export enum Gender {
   Male = 'male',
   Female = 'female',
 }
-export enum SourceSystem {
-  CZSS = 'czss',
-  OBITELJSKICENTAR = 'obiteljskicentar',
-}
-export enum ProtectionType {
-  ZMN = 'zmn',
-  PREPORUKA = 'preporuka',
-  UDOMITELJSTVO = 'udomiteljstvo',
-}
 
 @Entity()
 export class ProjectUser {
@@ -25,12 +16,6 @@ export class ProjectUser {
 
   @Column({ default: Gender.Male })
   gender: Gender;
-
-  @Column({ default: SourceSystem.CZSS })
-  sourceSystem: SourceSystem;
-
-  @Column({ default: ProtectionType.PREPORUKA })
-  protectionType: ProtectionType;
 
   @Column()
   guardianName: string;
