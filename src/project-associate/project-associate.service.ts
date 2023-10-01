@@ -20,13 +20,20 @@ export class ProjectAssociateService {
   }
 
   async findAll(options: IPaginationOptions) {
-    return paginate<ProjectAssociate>(this.projectAssociateRepository, options);
+    return paginate<ProjectAssociate>(
+      this.projectAssociateRepository,
+      { ...options },
+      { order: { clubName: 'ASC' } },
+    );
   }
 
   async findOne(id) {
     return await this.projectAssociateRepository.findOne({
       where: { id: id },
       relations: ['activity', 'category'],
+      order: {
+        clubName: 'ASC',
+      },
     });
   }
 

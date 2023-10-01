@@ -22,6 +22,7 @@ export class ActivityService {
   async findAll() {
     return await this.activityRepository.find({
       relations: ['projectAssociate', 'schoolYear'],
+      order: { activityName: 'ASC' },
     });
   }
 
@@ -64,6 +65,7 @@ export class ActivityService {
           },
         ],
         relations: ['projectAssociate', 'schoolYear'],
+        order: { activityName: 'ASC' },
       });
     } else if (schoolYearId && activityStatus && studentOnSchoolYearId) {
       const studentOnSchoolYear =
@@ -84,6 +86,7 @@ export class ActivityService {
           id: Not(In(activityIds)),
         },
         relations: ['projectAssociate', 'schoolYear'],
+        order: { activityName: 'ASC' },
       });
     } else if (query) {
       return await this.activityRepository.find({
@@ -93,6 +96,7 @@ export class ActivityService {
           { projectAssociate: { email: Like(`%${query}%`) } },
         ],
         relations: ['projectAssociate', 'schoolYear'],
+        order: { activityName: 'ASC' },
       });
     } else if (schoolYearId) {
       return await this.activityRepository.find({
@@ -100,6 +104,7 @@ export class ActivityService {
           schoolYearId: schoolYearId,
         },
         relations: ['projectAssociate', 'schoolYear'],
+        order: { activityName: 'ASC' },
       });
     } else if (activityStatus) {
       return await this.activityRepository.find({
@@ -107,6 +112,7 @@ export class ActivityService {
           activityStatus: activityStatus,
         },
         relations: ['projectAssociate', 'schoolYear'],
+        order: { activityName: 'ASC' },
       });
     }
   }

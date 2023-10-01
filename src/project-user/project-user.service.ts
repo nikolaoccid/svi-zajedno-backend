@@ -18,7 +18,11 @@ export class ProjectUserService {
   }
 
   async findAll(options: IPaginationOptions) {
-    return paginate<ProjectUser>(this.projectUserRepository, options);
+    return paginate<ProjectUser>(
+      this.projectUserRepository,
+      { ...options },
+      { order: { childSurname: 'ASC' } },
+    );
   }
 
   async findOneByQuery(query: string) {
