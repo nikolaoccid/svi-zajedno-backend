@@ -157,11 +157,11 @@ export class StatisticsService {
       } else if (user.gender === 'female') {
         statistics.femaleUsers++;
       }
-
-      statistics.sourceSystems[user.sourceSystem] =
-        (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
-      statistics.protectionTypes[user.protectionType] =
-        (statistics.protectionTypes[user.protectionType] || 0) + 1;
+      //TODO fix statistics
+      // statistics.sourceSystems[user.sourceSystem] =
+      //   (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
+      // statistics.protectionTypes[user.protectionType] =
+      //   (statistics.protectionTypes[user.protectionType] || 0) + 1;
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
         if (studentOnSchoolYear.status === 'active') {
           statistics.activeUsers++;

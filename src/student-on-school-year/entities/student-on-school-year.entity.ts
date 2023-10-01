@@ -5,7 +5,15 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-
+export enum SourceSystem {
+  CZSS = 'czss',
+  OBITELJSKICENTAR = 'obiteljskicentar',
+}
+export enum ProtectionType {
+  ZMN = 'zmn',
+  PREPORUKA = 'preporuka',
+  UDOMITELJSTVO = 'udomiteljstvo',
+}
 import { ProjectUser } from '../../project-user/entities/project-user.entity';
 import { SchoolYear } from '../../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../../student-on-activity/entities/student-on-activity.entity';
@@ -36,6 +44,16 @@ export class StudentOnSchoolYear {
 
   @Column()
   status: Status;
+
+  @Column({ default: SourceSystem.CZSS })
+  sourceSystem: SourceSystem;
+
+  @Column({ default: ProtectionType.PREPORUKA })
+  protectionType: ProtectionType;
+
+  @Column({ default: new Date().toDateString() })
+  dateOfEnrollment: Date;
+
   @OneToMany(
     () => StudentOnActivity,
     (studentOnActivity) => studentOnActivity.studentOnSchoolYear,

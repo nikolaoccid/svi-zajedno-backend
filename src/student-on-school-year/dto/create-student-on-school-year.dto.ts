@@ -1,6 +1,10 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-import { Status } from '../entities/student-on-school-year.entity';
+import {
+  ProtectionType,
+  SourceSystem,
+  Status,
+} from '../entities/student-on-school-year.entity';
 
 export class CreateStudentOnSchoolYearDto {
   @IsNotEmpty()
@@ -13,4 +17,13 @@ export class CreateStudentOnSchoolYearDto {
 
   @IsNotEmpty()
   status: Status;
+
+  @IsNotEmpty()
+  sourceSystem: SourceSystem;
+
+  @IsNotEmpty()
+  protectionType: ProtectionType;
+
+  @IsOptional()
+  dateOfEnrollment: Date;
 }
