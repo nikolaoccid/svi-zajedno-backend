@@ -36,7 +36,7 @@ const cookieSessionModule = CookieSessionModule.forRootAsync({
   },
 });
 
-const dbModule = TypeOrmModule.forRootAsync({
+export const dbModule = TypeOrmModule.forRootAsync({
   useFactory: (config: Config) => ({
     type: 'postgres',
     host: config.databaseHost(),
@@ -54,8 +54,13 @@ const dbModule = TypeOrmModule.forRootAsync({
       StudentOnSchoolYear,
       StudentOnActivity,
     ],
-    synchronize: config.synchronize() === 'true',
+    migrationsTableName: 'migrations',
+    migrations: ['dist/migrations/*.{ts,js}'],
+    synchronize: true,
     ssl: config.databaseDisableSsl() != 'true',
+    cli: {
+      migrationsDir: `/migrations`,
+    },
     namingStrategy: new SnakeNamingStrategy(),
   }),
   inject: [Config],
