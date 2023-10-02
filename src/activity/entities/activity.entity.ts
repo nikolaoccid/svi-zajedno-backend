@@ -40,6 +40,7 @@ export class Activity {
   @OneToMany(
     () => StudentOnActivity,
     (studentOnActivity) => studentOnActivity.activity,
+    { onDelete: 'CASCADE' },
   )
   studentOnActivity: StudentOnActivity[];
 

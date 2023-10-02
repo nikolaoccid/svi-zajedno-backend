@@ -26,7 +26,9 @@ export class StudentOnActivity {
   @Column({ default: new Date() })
   createdAt: Date;
 
-  @ManyToOne(() => Activity, (activity) => activity.studentOnActivity)
+  @ManyToOne(() => Activity, (activity) => activity.studentOnActivity, {
+    onDelete: 'CASCADE',
+  })
   activity: Activity;
   @Column()
   activityId: number;
