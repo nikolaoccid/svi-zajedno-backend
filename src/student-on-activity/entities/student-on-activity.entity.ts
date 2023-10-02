@@ -23,6 +23,9 @@ export class StudentOnActivity {
   @Column()
   studentOnSchoolYearId: number;
 
+  @Column({ default: new Date() })
+  createdAt: Date;
+
   @ManyToOne(() => Activity, (activity) => activity.studentOnActivity)
   activity: Activity;
   @Column()
