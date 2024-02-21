@@ -29,7 +29,7 @@ export class SchoolYearService {
   }
 
   async getByStartYear(startYear: number) {
-    return await this.schoolYearRepository.findBy({ startYear });
+    return await this.schoolYearRepository.findOneBy({ startYear });
   }
 
   async getById(id: number) {
