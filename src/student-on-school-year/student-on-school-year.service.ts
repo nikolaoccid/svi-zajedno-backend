@@ -21,7 +21,7 @@ export class StudentOnSchoolYearService {
       createStudentOnSchoolYearDto.userId,
       createStudentOnSchoolYearDto.schoolYearId,
     );
-    if (record.length > 0) {
+    if (record) {
       throw new BadRequestException();
     }
     return await this.studentOnSchoolYear.save(createStudentOnSchoolYearDto);
@@ -31,8 +31,8 @@ export class StudentOnSchoolYearService {
     return await this.studentOnSchoolYear.find();
   }
 
-  async findAllBySchoolYearAndUser(userId, schoolYearId) {
-    return await this.studentOnSchoolYear.find({
+  async findAllBySchoolYearAndUser(userId: number, schoolYearId: number) {
+    return await this.studentOnSchoolYear.findOne({
       where: { userId: userId, schoolYearId: schoolYearId },
       relations: ['schoolYear', 'user'],
     });
