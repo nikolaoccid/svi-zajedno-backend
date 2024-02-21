@@ -18,6 +18,9 @@ export class User {
   @Exclude({ toPlainOnly: true })
   passwordHash: string;
 
+  @Column({ default: 'User' })
+  name: string;
+
   @Column({ default: UserRole.Admin })
   role: UserRole;
 }
