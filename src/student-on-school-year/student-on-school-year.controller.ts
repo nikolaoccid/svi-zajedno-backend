@@ -68,6 +68,57 @@ export class StudentOnSchoolYearController {
     }
   }
 
+  @Get('users/:schoolYearId')
+  @ApiQuery({
+    name: 'query',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    required: false,
+  })
+  async findUsersBySchoolYear(
+    @Query() query: { query: string },
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Param('schoolYearId') schoolYearId: string,
+    @AuthenticatedUser() user: User,
+  ) {
+    if (user.role !== UserRole.Admin) {
+      throw new UnauthorizedException();
+    }
+    const allItems =
+      await this.studentOnSchoolYearService.findUsersBySchoolYear(
+        +schoolYearId,
+        query.query,
+      );
+    const totalCount = allItems.length;
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = Math.min(totalPages, Math.max(1, page)); // Ensure currentPage is within valid range
+    const startIndex = (currentPage - 1) * limit;
+    const endIndex = Math.min(startIndex + limit, totalCount);
+
+    const items = allItems.slice(startIndex, endIndex);
+
+    return {
+      items: items,
+      meta: {
+        currentPage: currentPage,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalItems: totalCount,
+        totalPages: totalPages,
+      },
+    };
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @AuthenticatedUser() user: User) {
     if (user.role !== UserRole.Admin) {

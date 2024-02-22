@@ -21,25 +21,31 @@ export class ProjectUserService {
     return paginate<ProjectUser>(
       this.projectUserRepository,
       { ...options },
-      { order: { childSurname: 'ASC' } },
+      { order: { childSurname: 'ASC' }, relations: ['studentOnSchoolYear'] },
     );
   }
 
-  async findOneByQuery(query: string) {
-    return await this.projectUserRepository.find({
-      where: [
-        { oib: Like(`%${query}%`) },
-        { childName: Like(`%${query}%`) },
-        { childSurname: Like(`%${query}%`) },
-        { guardianName: Like(`%${query}%`) },
-        { guardianSurname: Like(`%${query}%`) },
-        { email: Like(`%${query}%`) },
-        { mobilePhone: Like(`%${query}%`) },
-        { school: Like(`%${query}%`) },
-        { address: Like(`%${query}%`) },
-        { city: Like(`%${query}%`) },
-      ],
-    });
+  async findOneByQuery(query: string, options: IPaginationOptions) {
+    return paginate<ProjectUser>(
+      this.projectUserRepository,
+      { ...options },
+      {
+        order: { childSurname: 'ASC' },
+        relations: ['studentOnSchoolYear'],
+        where: [
+          { oib: Like(`%${query}%`) },
+          { childName: Like(`%${query}%`) },
+          { childSurname: Like(`%${query}%`) },
+          { guardianName: Like(`%${query}%`) },
+          { guardianSurname: Like(`%${query}%`) },
+          { email: Like(`%${query}%`) },
+          { mobilePhone: Like(`%${query}%`) },
+          { school: Like(`%${query}%`) },
+          { address: Like(`%${query}%`) },
+          { city: Like(`%${query}%`) },
+        ],
+      },
+    );
   }
 
   async findOne(id: number) {

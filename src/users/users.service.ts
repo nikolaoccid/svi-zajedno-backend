@@ -33,4 +33,8 @@ export class UsersService {
   async getById(id: number) {
     return await this.userRepository.findOneBy({ id });
   }
+
+  async getBySchoolYearId(schoolYearId: number) {
+    return await this.userRepository.find({});
+  }
 }

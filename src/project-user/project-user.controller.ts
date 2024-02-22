@@ -66,7 +66,10 @@ export class ProjectUserController {
       throw new UnauthorizedException();
     }
     if (query.query) {
-      return this.projectUserService.findOneByQuery(query.query);
+      return this.projectUserService.findOneByQuery(query.query, {
+        page,
+        limit,
+      });
     }
     return this.projectUserService.findAll({ page, limit });
   }
