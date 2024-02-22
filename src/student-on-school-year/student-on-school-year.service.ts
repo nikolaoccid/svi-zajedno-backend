@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { Like, Repository } from 'typeorm';
 
+import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { CreateStudentOnSchoolYearDto } from './dto/create-student-on-school-year.dto';
 import { UpdateStudentOnSchoolYearDto } from './dto/update-student-on-school-year.dto';
 import { StudentOnSchoolYear } from './entities/student-on-school-year.entity';
@@ -36,6 +38,62 @@ export class StudentOnSchoolYearService {
       where: { userId: userId, schoolYearId: schoolYearId },
       relations: ['schoolYear', 'user'],
     });
+  }
+
+  async findUsersBySchoolYear(schoolYearId: number, query: string) {
+    const users = [];
+    let res: any[] = [];
+    if (query) {
+      res = await this.studentOnSchoolYear.find({
+        where: [
+          { schoolYearId: schoolYearId, user: { oib: Like(`%${query}%`) } },
+          {
+            schoolYearId: schoolYearId,
+            user: { childName: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            user: { childSurname: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            user: { guardianName: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            user: { guardianSurname: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            user: { email: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            user: { mobilePhone: Like(`%${query}%`) },
+          },
+          { schoolYearId: schoolYearId, user: { school: Like(`%${query}%`) } },
+          { schoolYearId: schoolYearId, user: { address: Like(`%${query}%`) } },
+          { schoolYearId: schoolYearId, user: { city: Like(`%${query}%`) } },
+        ],
+        relations: ['user'],
+        order: { user: { childSurname: 'ASC' } },
+      });
+    } else {
+      res = await this.studentOnSchoolYear.find({
+        where: { schoolYearId },
+        relations: ['user'],
+        order: { user: { childSurname: 'ASC' } },
+      });
+    }
+
+    res.forEach((r) => {
+      const mergedUser = {
+        ...r.user,
+        schoolYearStatus: r.status,
+      };
+      users.push(mergedUser);
+    });
+    return users;
   }
 
   async findOne(id: number) {

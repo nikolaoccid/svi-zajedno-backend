@@ -32,7 +32,7 @@ export class StudentOnSchoolYear {
     () => ProjectUser,
     (projectUser) => projectUser.studentOnSchoolYear,
   )
-  user: User;
+  user: ProjectUser;
 
   @Column()
   userId: number;
