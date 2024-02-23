@@ -17,6 +17,7 @@ import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorat
 import { User, UserRole } from '../users/user.entity';
 import { CreateStudentOnSchoolYearDto } from './dto/create-student-on-school-year.dto';
 import { UpdateStudentOnSchoolYearDto } from './dto/update-student-on-school-year.dto';
+import { Status } from './entities/student-on-school-year.entity';
 import { StudentOnSchoolYearService } from './student-on-school-year.service';
 
 @Controller('student-on-school-year')
@@ -75,6 +76,11 @@ export class StudentOnSchoolYearController {
     required: false,
   })
   @ApiQuery({
+    name: 'status',
+    enum: Status,
+    required: false,
+  })
+  @ApiQuery({
     name: 'page',
     type: Number,
     required: false,
@@ -86,6 +92,7 @@ export class StudentOnSchoolYearController {
   })
   async findUsersBySchoolYear(
     @Query() query: { query: string },
+    @Query() status: { status: Status },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
     @Param('schoolYearId') schoolYearId: string,
@@ -98,6 +105,7 @@ export class StudentOnSchoolYearController {
       await this.studentOnSchoolYearService.findUsersBySchoolYear(
         +schoolYearId,
         query.query,
+        status.status,
       );
     const totalCount = allItems.length;
     const totalPages = Math.ceil(totalCount / limit);
