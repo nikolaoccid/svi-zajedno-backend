@@ -4,13 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { Like, Repository } from 'typeorm';
 
-import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { CreateStudentOnSchoolYearDto } from './dto/create-student-on-school-year.dto';
 import { UpdateStudentOnSchoolYearDto } from './dto/update-student-on-school-year.dto';
-import { StudentOnSchoolYear } from './entities/student-on-school-year.entity';
+import {
+  Status,
+  StudentOnSchoolYear,
+} from './entities/student-on-school-year.entity';
 
 @Injectable()
 export class StudentOnSchoolYearService {
@@ -40,40 +41,113 @@ export class StudentOnSchoolYearService {
     });
   }
 
-  async findUsersBySchoolYear(schoolYearId: number, query: string) {
+  async findUsersBySchoolYear(
+    schoolYearId: number,
+    query: string,
+    status: Status,
+  ) {
     const users = [];
     let res: any[] = [];
-    if (query) {
+    if (query && status) {
       res = await this.studentOnSchoolYear.find({
         where: [
-          { schoolYearId: schoolYearId, user: { oib: Like(`%${query}%`) } },
           {
             schoolYearId: schoolYearId,
+            status: status,
+            user: { oib: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
             user: { childName: Like(`%${query}%`) },
           },
           {
             schoolYearId: schoolYearId,
+            status: status,
             user: { childSurname: Like(`%${query}%`) },
           },
           {
             schoolYearId: schoolYearId,
+            status: status,
             user: { guardianName: Like(`%${query}%`) },
           },
           {
             schoolYearId: schoolYearId,
+            status: status,
             user: { guardianSurname: Like(`%${query}%`) },
           },
           {
             schoolYearId: schoolYearId,
+            status: status,
             user: { email: Like(`%${query}%`) },
           },
           {
             schoolYearId: schoolYearId,
+            status: status,
             user: { mobilePhone: Like(`%${query}%`) },
           },
-          { schoolYearId: schoolYearId, user: { school: Like(`%${query}%`) } },
-          { schoolYearId: schoolYearId, user: { address: Like(`%${query}%`) } },
-          { schoolYearId: schoolYearId, user: { city: Like(`%${query}%`) } },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+            user: { school: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+            user: { address: Like(`%${query}%`) },
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+            user: { city: Like(`%${query}%`) },
+          },
+        ],
+        relations: ['user'],
+        order: { user: { childSurname: 'ASC' } },
+      });
+    } else if (status) {
+      res = await this.studentOnSchoolYear.find({
+        where: [
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
+          {
+            schoolYearId: schoolYearId,
+            status: status,
+          },
         ],
         relations: ['user'],
         order: { user: { childSurname: 'ASC' } },
