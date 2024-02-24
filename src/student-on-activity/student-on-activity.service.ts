@@ -47,6 +47,7 @@ export class StudentOnActivityService {
         'studentOnSchoolYear',
         'activity.projectAssociate',
       ],
+      order: { activity: { activityName: 'ASC' } },
     });
   }
 
