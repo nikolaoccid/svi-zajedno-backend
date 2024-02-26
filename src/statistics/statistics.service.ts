@@ -8,6 +8,7 @@ import { ProjectAssociate } from '../project-associate/entities/project-associat
 import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
+import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 
 @Injectable()
 export class StatisticsService {
@@ -158,11 +159,12 @@ export class StatisticsService {
         statistics.femaleUsers++;
       }
       //TODO fix statistics
-      // statistics.sourceSystems[user.sourceSystem] =
-      //   (statistics.sourceSystems[user.sourceSystem] || 0) + 1;
-      // statistics.protectionTypes[user.protectionType] =
-      //   (statistics.protectionTypes[user.protectionType] || 0) + 1;
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
+        statistics.sourceSystems[studentOnSchoolYear.sourceSystem] =
+          (statistics.sourceSystems[studentOnSchoolYear.sourceSystem] || 0) + 1;
+        statistics.protectionTypes[studentOnSchoolYear.protectionType] =
+          (statistics.protectionTypes[studentOnSchoolYear.protectionType] ||
+            0) + 1;
         if (studentOnSchoolYear.status === 'active') {
           statistics.activeUsers++;
         } else if (studentOnSchoolYear.status === 'inactive') {
