@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 
-import { Activity } from '../activity/entities/activity.entity';
+import { Activity, ActivityStatus } from '../activity/entities/activity.entity';
 import { Category } from '../category/entities/category.entity';
 import { ProjectAssociate } from '../project-associate/entities/project-associate.entity';
 import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
-import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 
 @Injectable()
 export class StatisticsService {
@@ -139,6 +138,10 @@ export class StatisticsService {
       pendingActivities: 0,
       totalActivities: 0,
       totalProjectValue: 0,
+
+      associatesTotalActivities: 0,
+      associatesActiveActivities: 0,
+      associatesInactiveActivities: 0,
     };
 
     for (const user of users) {
@@ -158,7 +161,6 @@ export class StatisticsService {
       } else if (user.gender === 'female') {
         statistics.femaleUsers++;
       }
-      //TODO fix statistics
       for (const studentOnSchoolYear of user.studentOnSchoolYear) {
         statistics.sourceSystems[studentOnSchoolYear.sourceSystem] =
           (statistics.sourceSystems[studentOnSchoolYear.sourceSystem] || 0) + 1;
@@ -188,6 +190,17 @@ export class StatisticsService {
         }
       }
     }
+    statistics.associatesActiveActivities = await this.activityRepository.count(
+      {
+        where: { activityStatus: ActivityStatus.Active },
+      },
+    );
+    statistics.associatesTotalActivities =
+      await this.activityRepository.count();
+    statistics.associatesInactiveActivities =
+      await this.activityRepository.count({
+        where: { activityStatus: ActivityStatus.Inactive },
+      });
 
     return statistics;
   }
