@@ -68,7 +68,10 @@ export class ProjectAssociateController {
       throw new UnauthorizedException();
     }
     if (query.query) {
-      return this.projectAssociateService.findOneByQuery(query.query);
+      return this.projectAssociateService.findOneByQuery(query.query, {
+        page,
+        limit,
+      });
     }
 
     return this.projectAssociateService.findAll({ page, limit });
