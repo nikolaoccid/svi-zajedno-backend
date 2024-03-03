@@ -90,11 +90,17 @@ export class StudentOnSchoolYearController {
     type: Number,
     required: false,
   })
+  @ApiQuery({
+    name: 'sortBy',
+    type: String,
+    required: false,
+  })
   async findUsersBySchoolYear(
     @Query() query: { query: string },
     @Query() status: { status: Status },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Query('sortBy') sortBy = undefined,
     @Param('schoolYearId') schoolYearId: string,
     @AuthenticatedUser() user: User,
   ) {
@@ -106,6 +112,7 @@ export class StudentOnSchoolYearController {
         +schoolYearId,
         query.query,
         status.status,
+        sortBy,
       );
     const totalCount = allItems.length;
     const totalPages = Math.ceil(totalCount / limit);

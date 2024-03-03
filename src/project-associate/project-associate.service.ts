@@ -37,15 +37,20 @@ export class ProjectAssociateService {
     });
   }
 
-  async findOneByQuery(query: string) {
-    return await this.projectAssociateRepository.find({
-      where: [
-        { clubName: Like(`%${query}%`) },
-        { email: Like(`%${query}%`) },
-        { mobilePhone: Like(`%${query}%`) },
-        { contactPerson: Like(`%${query}%`) },
-      ],
-    });
+  async findOneByQuery(query: string, options: IPaginationOptions) {
+    return paginate<ProjectAssociate>(
+      this.projectAssociateRepository,
+      { ...options },
+      {
+        order: { clubName: 'ASC' },
+        where: [
+          { clubName: Like(`%${query}%`) },
+          { email: Like(`%${query}%`) },
+          { mobilePhone: Like(`%${query}%`) },
+          { contactPerson: Like(`%${query}%`) },
+        ],
+      },
+    );
   }
 
   async update(
