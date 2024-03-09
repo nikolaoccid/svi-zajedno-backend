@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Not, Repository } from 'typeorm';
+import { ILike, In, Not, Repository } from 'typeorm';
 
 import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 import { CreateActivityDto } from './dto/create-activity.dto';
@@ -48,19 +48,19 @@ export class ActivityService {
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
-            activityName: Like(`%${query}%`),
+            activityName: ILike(`%${query}%`),
             id: Not(In(activityIds)),
           },
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
-            projectAssociate: { clubName: Like(`%${query}%`) },
+            projectAssociate: { clubName: ILike(`%${query}%`) },
             id: Not(In(activityIds)),
           },
           {
             schoolYearId: schoolYearId,
             activityStatus: activityStatus,
-            projectAssociate: { email: Like(`%${query}%`) },
+            projectAssociate: { email: ILike(`%${query}%`) },
             id: Not(In(activityIds)),
           },
         ],
@@ -91,9 +91,9 @@ export class ActivityService {
     } else if (query) {
       return await this.activityRepository.find({
         where: [
-          { activityName: Like(`%${query}%`) },
-          { projectAssociate: { clubName: Like(`%${query}%`) } },
-          { projectAssociate: { email: Like(`%${query}%`) } },
+          { activityName: ILike(`%${query}%`) },
+          { projectAssociate: { clubName: ILike(`%${query}%`) } },
+          { projectAssociate: { email: ILike(`%${query}%`) } },
         ],
         relations: ['projectAssociate', 'schoolYear'],
         order: { activityName: 'ASC' },

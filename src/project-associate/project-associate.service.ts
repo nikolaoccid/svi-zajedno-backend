@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { Like, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
@@ -44,10 +44,10 @@ export class ProjectAssociateService {
       {
         order: { clubName: 'ASC' },
         where: [
-          { clubName: Like(`%${query}%`) },
-          { email: Like(`%${query}%`) },
-          { mobilePhone: Like(`%${query}%`) },
-          { contactPerson: Like(`%${query}%`) },
+          { clubName: ILike(`%${query}%`) },
+          { email: ILike(`%${query}%`) },
+          { mobilePhone: ILike(`%${query}%`) },
+          { contactPerson: ILike(`%${query}%`) },
         ],
       },
     );
