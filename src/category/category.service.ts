@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { ILike, Repository } from 'typeorm';
 
 import { CategoryDto } from './dto/category.dto';
 import { Category } from './entities/category.entity';
@@ -17,8 +18,16 @@ export class CategoryService {
     });
   }
 
-  async findAll() {
-    return await this.categoryRepository.find();
+  async findAll(query: string, options: IPaginationOptions) {
+    if (query !== '') {
+      return paginate<Category>(
+        this.categoryRepository,
+        { ...options },
+        { where: { categoryName: ILike(`%${query}%`) } },
+      );
+    } else {
+      return paginate<Category>(this.categoryRepository, { ...options });
+    }
   }
 
   async findOne(id: number) {
