@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AxiosErrorFilter } from './axios-error.filter';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
+import { ExportModule } from './export/export.module';
 import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
 import { ProjectAssociateModule } from './project-associate/project-associate.module';
 import { ProjectUser } from './project-user/entities/project-user.entity';
@@ -96,6 +97,7 @@ const classSerializerInterceptorModule = {
     StudentOnSchoolYearModule,
     StudentOnActivityModule,
     StatisticsModule,
+    ExportModule,
   ],
   controllers: [],
   providers: [
