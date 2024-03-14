@@ -7,6 +7,7 @@ import { ProjectAssociate } from '../project-associate/entities/project-associat
 import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
+import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 import { StatisticsController } from './statistics.controller';
 import { StatisticsService } from './statistics.service';
 
@@ -18,6 +19,7 @@ import { StatisticsService } from './statistics.service';
       Activity,
       SchoolYear,
       StudentOnActivity,
+      StudentOnSchoolYear,
       ProjectUser,
     ]),
   ],

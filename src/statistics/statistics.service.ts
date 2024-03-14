@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as exceljs from 'exceljs';
+import * as tmp from 'tmp';
 import { MoreThan, Repository } from 'typeorm';
 
 import { Activity, ActivityStatus } from '../activity/entities/activity.entity';
@@ -8,6 +10,7 @@ import { ProjectAssociate } from '../project-associate/entities/project-associat
 import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
+import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
 
 @Injectable()
 export class StatisticsService {
@@ -24,6 +27,8 @@ export class StatisticsService {
     private readonly studentOnActivityRepository: Repository<StudentOnActivity>,
     @InjectRepository(ProjectUser)
     private readonly projectUserRepository: Repository<ProjectUser>,
+    @InjectRepository(StudentOnSchoolYear)
+    private readonly studentOnSchoolYearRepository: Repository<StudentOnSchoolYear>,
   ) {}
 
   async getProjectAssociatesStatistics(schoolYearId: number) {
