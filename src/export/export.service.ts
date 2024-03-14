@@ -64,6 +64,7 @@ export class ExportService {
       return await Promise.all(
         users.map(async (studentOnSchoolYear) => {
           const activities = await this.getActivities(studentOnSchoolYear);
+          // console.log('getUsersWithActivities, activities:', activities);
           return { user: studentOnSchoolYear, activities };
         }),
       );
@@ -78,7 +79,7 @@ export class ExportService {
       return await this.studentOnActivityRepository.find({
         where: { studentOnSchoolYear: { id: studentOnSchoolYear.id } },
         order: { createdAt: 'DESC' },
-        relations: ['activity'],
+        relations: ['activity', 'activity.projectAssociate'],
       });
     } catch (error) {
       console.error('Error in getActivities:', error);
@@ -139,26 +140,38 @@ export class ExportService {
       this.getWorksheetNameFromSchoolYear(workbookName),
     );
     sheet.columns = [
-      { header: 'Ime skrbnika', key: 'col1' },
-      { header: 'Email', key: 'col2' },
-      { header: 'Mobitel', key: 'col3' },
-      { header: 'Ime djeteta', key: 'col4' },
-      { header: 'Datum rodenja', key: 'col5' },
-      { header: 'OIB', key: 'col6' },
-      { header: 'Adresa stanovanja', key: 'col7' },
-      { header: 'Osnovna skola', key: 'col8' },
-      { header: 'Aktivnost', key: 'col9' },
-      { header: 'Cijena', key: 'col10' },
-      { header: 'Status aktivnosti', key: 'col11' },
-      { header: 'Datum upisa', key: 'col12' },
-      { header: 'Aktivnost', key: 'col13' },
-      { header: 'Cijena', key: 'col14' },
-      { header: 'Status aktivnosti', key: 'col15' },
-      { header: 'Datum upisa', key: 'col16' },
-      { header: 'Aktivnost', key: 'col17' },
-      { header: 'Cijena', key: 'col18' },
-      { header: 'Status aktivnosti', key: 'col19' },
-      { header: 'Datum upisa', key: 'col20' },
+      { header: 'Ime skrbnika' },
+      { header: 'Email' },
+      { header: 'Mobitel' },
+      { header: 'Ime djeteta' },
+      { header: 'Datum rodenja' },
+      { header: 'OIB' },
+      { header: 'Adresa stanovanja' },
+      { header: 'Osnovna skola' },
+
+      { header: 'Aktivnost' },
+      { header: 'Klub' },
+      { header: 'Cijena' },
+      { header: 'Status aktivnosti' },
+      { header: 'Datum upisa' },
+
+      { header: 'Aktivnost' },
+      { header: 'Klub' },
+      { header: 'Cijena' },
+      { header: 'Status aktivnosti' },
+      { header: 'Datum upisa' },
+
+      { header: 'Aktivnost' },
+      { header: 'Klub' },
+      { header: 'Cijena' },
+      { header: 'Status aktivnosti' },
+      { header: 'Datum upisa' },
+
+      { header: 'Aktivnost' },
+      { header: 'Klub' },
+      { header: 'Cijena' },
+      { header: 'Status aktivnosti' },
+      { header: 'Datum upisa' },
     ];
     sheet.columns.forEach((column) => {
       column.width = column.header.length < 15 ? 15 : column.header.length;
@@ -189,9 +202,17 @@ export class ExportService {
             user.user.school,
           ];
           activities.forEach((activity) => {
+            console.log('activity:', activity);
+            console.log(
+              'activity: project associate',
+              activity?.projectAssociate,
+            );
             rowData.push(
               activity.activity.activityName,
-              activity.activity.activityPrice,
+              activity.activity.projectAssociate.clubName,
+              activity.activity.activityPrice !== 0
+                ? activity.activity.activityPrice + ' EUR'
+                : 'Besplatno',
               activity.activity.activityStatus,
               activity.createdAt,
             );
