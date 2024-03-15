@@ -106,6 +106,29 @@ export class ExportService {
         await this.createWorkBookWithRows(book, key, rows);
       }
     }
+
+    book.eachSheet((sheet) => {
+      sheet.eachRow((row, rowNumber) => {
+        row.height = 20;
+        row.alignment = { vertical: 'middle' };
+        row.eachCell((cell) => {
+          if (rowNumber % 2 !== 0) {
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'edf3fa' },
+            };
+          }
+
+          cell.font = {
+            name: 'Arial',
+            size: 13,
+            bold: rowNumber === 1,
+          };
+        });
+      });
+    });
+
     return book;
   }
 
@@ -148,6 +171,8 @@ export class ExportService {
       { header: 'OIB' },
       { header: 'Adresa stanovanja' },
       { header: 'Osnovna skola' },
+      { header: 'Datum upisa na skolsku godinu' },
+      { header: 'Status upisa na skolsku godinu' },
 
       { header: 'Aktivnost' },
       { header: 'Klub' },
@@ -174,7 +199,7 @@ export class ExportService {
       { header: 'Datum upisa' },
     ];
     sheet.columns.forEach((column) => {
-      column.width = column.header.length < 15 ? 15 : column.header.length;
+      column.width = column.header.length < 25 ? 25 : column.header.length;
     });
 
     sheet.addRows(rows);
@@ -200,13 +225,10 @@ export class ExportService {
             user.user.oib,
             `${user.user.address}, ${user.user.city}`,
             user.user.school,
+            user.dateOfEnrollment,
+            user.status,
           ];
           activities.forEach((activity) => {
-            console.log('activity:', activity);
-            console.log(
-              'activity: project associate',
-              activity?.projectAssociate,
-            );
             rowData.push(
               activity.activity.activityName,
               activity.activity.projectAssociate.clubName,
