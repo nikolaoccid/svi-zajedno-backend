@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { User, UserRole } from '../users/user.entity';
@@ -33,11 +36,31 @@ export class SchoolYearController {
   }
 
   @Get()
-  findAll(@AuthenticatedUser() user: User) {
+  @ApiQuery({
+    name: 'query',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    required: false,
+  })
+  findAll(
+    @AuthenticatedUser() user: User,
+    @Query() query: { query: string },
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+  ) {
     if (user.role != UserRole.Admin) {
       throw new UnauthorizedException();
     }
-    return this.schoolYearService.findAll();
+    return this.schoolYearService.findAll({ page, limit }, query.query);
   }
 
   @Get(':id')
