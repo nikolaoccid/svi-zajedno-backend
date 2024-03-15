@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { ILike, Repository } from 'typeorm';
 
+import { Category } from '../category/entities/category.entity';
 import { SchoolYearDto } from './dto/school-year.dto';
 import { SchoolYear } from './entities/school-year.entity';
 
@@ -24,8 +26,25 @@ export class SchoolYearService {
     return await this.schoolYearRepository.save(schoolYear);
   }
 
-  async findAll() {
-    return await this.schoolYearRepository.find();
+  async findAll(options: IPaginationOptions, query?: string) {
+    const allRecords = await paginate<SchoolYear>(
+      this.schoolYearRepository,
+      { ...options },
+      { order: { startYear: 'DESC' } },
+    );
+
+    let filteredItems = allRecords.items;
+
+    if (query !== '') {
+      const numberQuery = parseInt(query);
+      filteredItems = allRecords.items.filter(
+        (record) =>
+          record.startYear.toString().includes(numberQuery.toString()) ||
+          record.endYear.toString().includes(numberQuery.toString()),
+      );
+    }
+
+    return { ...allRecords, items: filteredItems };
   }
 
   async getByStartYear(startYear: number) {
