@@ -23,7 +23,10 @@ export class CategoryService {
       return paginate<Category>(
         this.categoryRepository,
         { ...options },
-        { where: { categoryName: ILike(`%${query}%`) } },
+        {
+          where: { categoryName: ILike(`%${query}%`) },
+          order: { categoryName: 'ASC' },
+        },
       );
     } else {
       return paginate<Category>(this.categoryRepository, { ...options });
