@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
 export enum Gender {
@@ -51,4 +58,10 @@ export class ProjectUser {
     (studentOnSchoolYear) => studentOnSchoolYear.user,
   )
   studentOnSchoolYear: StudentOnSchoolYear[];
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

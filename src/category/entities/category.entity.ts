@@ -1,12 +1,14 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
+import { User } from '../../users/user.entity';
 
 @Entity()
 export class Category {
@@ -21,4 +23,10 @@ export class Category {
     (projectAssociate) => projectAssociate.category,
   )
   projectAssociate: ProjectAssociate[];
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

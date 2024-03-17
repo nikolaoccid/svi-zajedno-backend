@@ -63,6 +63,10 @@ export class CategoryController {
     }
     return this.categoryService.findAll(query.query, { page, limit });
   }
+  @Get('/all')
+  getAllCategories() {
+    return this.categoryService.getAllCategories();
+  }
 
   @Get(':id')
   findOne(@AuthenticatedUser() user: User, @Param('id') id: string) {

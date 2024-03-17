@@ -12,9 +12,9 @@ export class CategoryService {
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
-  async create(categoryDto: CategoryDto) {
+  async create(category) {
     return await this.categoryRepository.save({
-      categoryName: this.capitalizeCategoryName(categoryDto.categoryName),
+      categoryName: this.capitalizeCategoryName(category.categoryName),
     });
   }
 
@@ -31,6 +31,10 @@ export class CategoryService {
     } else {
       return paginate<Category>(this.categoryRepository, { ...options });
     }
+  }
+
+  async getAllCategories() {
+    return await this.categoryRepository.find();
   }
 
   async findOne(id: number) {

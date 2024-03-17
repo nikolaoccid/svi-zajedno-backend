@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 export enum SourceSystem {
   CZSS = 'czss',
@@ -59,4 +61,10 @@ export class StudentOnSchoolYear {
     (studentOnActivity) => studentOnActivity.studentOnSchoolYear,
   )
   studentOnActivity: StudentOnActivity[];
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
