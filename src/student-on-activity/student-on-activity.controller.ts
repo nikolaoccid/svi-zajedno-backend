@@ -78,10 +78,10 @@ export class StudentOnActivityController {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
     }
-    return this.studentOnActivityService.update(
-      +id,
-      updateStudentOnActivityDto,
-    );
+    return this.studentOnActivityService.update(+id, {
+      ...updateStudentOnActivityDto,
+      unenrollmentDate: updateStudentOnActivityDto.unenrollmentDate ?? null,
+    });
   }
 
   @Delete(':id')
