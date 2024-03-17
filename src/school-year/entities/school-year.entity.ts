@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { Activity } from '../../activity/entities/activity.entity';
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
@@ -22,4 +29,10 @@ export class SchoolYear {
 
   @OneToMany(() => Activity, (activity) => activity.schoolYear)
   activity: Activity[];
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

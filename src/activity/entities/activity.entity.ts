@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { ProjectAssociate } from '../../project-associate/entities/project-associate.entity';
@@ -45,6 +47,13 @@ export class Activity {
 
   @ManyToOne(() => SchoolYear, (schoolYear) => schoolYear.activity)
   schoolYear: SchoolYear;
+
   @Column()
   schoolYearId: number;
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

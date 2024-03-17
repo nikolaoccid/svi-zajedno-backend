@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { Activity } from '../../activity/entities/activity.entity';
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
@@ -23,11 +30,20 @@ export class StudentOnActivity {
   @Column()
   studentOnSchoolYearId: number;
 
-  @Column({ default: new Date() })
-  createdAt: Date;
+  @Column({ nullable: true })
+  enrollmentDate: Date;
+
+  @Column({ nullable: true })
+  unenrollmentDate: Date;
 
   @ManyToOne(() => Activity, (activity) => activity.studentOnActivity)
   activity: Activity;
   @Column()
   activityId: number;
+
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
