@@ -40,7 +40,7 @@ export class StatisticsService {
       const projectAssociatesCount =
         await this.projectAssociateRepository.count({
           where: {
-            category: category,
+            category: { id: category.id },
             activity: { schoolYear: { id: schoolYearId } },
           },
         });
@@ -53,7 +53,7 @@ export class StatisticsService {
       // Count free activities in the category
       const freeActivitiesCount = await this.activityRepository.count({
         where: {
-          projectAssociate: { category },
+          projectAssociate: { category: { id: category.id } },
           activityPrice: 0,
           schoolYear: { id: schoolYearId },
         },
@@ -62,7 +62,7 @@ export class StatisticsService {
       // Count paid activities in the category
       const paidActivitiesCount = await this.activityRepository.count({
         where: {
-          projectAssociate: { category },
+          projectAssociate: { category: { id: category.id } },
           activityPrice: MoreThan(0),
           schoolYear: { id: schoolYearId },
         },
@@ -73,7 +73,7 @@ export class StatisticsService {
         await this.studentOnActivityRepository.count({
           where: {
             activity: {
-              projectAssociate: { category },
+              projectAssociate: { category: { id: category.id } },
               activityPrice: 0,
               schoolYear: { id: schoolYearId },
             },
@@ -85,7 +85,7 @@ export class StatisticsService {
         await this.studentOnActivityRepository.count({
           where: {
             activity: {
-              projectAssociate: { category },
+              projectAssociate: { category: { id: category.id } },
               activityPrice: MoreThan(0),
               schoolYear: { id: schoolYearId },
             },
