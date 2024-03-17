@@ -214,7 +214,7 @@ export class StatisticsService {
     const dateParts = dateString.split('.');
 
     if (dateParts.length !== 3) {
-      throw new Error('Date is not in good format');
+      throw new Error('Date is not in good format, got: ' + dateString);
     }
 
     const day = parseInt(dateParts[0], 10);
