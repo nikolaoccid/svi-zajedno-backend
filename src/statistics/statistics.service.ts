@@ -1,7 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as exceljs from 'exceljs';
-import * as tmp from 'tmp';
 import { MoreThan, Repository } from 'typeorm';
 
 import { Activity, ActivityStatus } from '../activity/entities/activity.entity';
@@ -211,6 +209,14 @@ export class StatisticsService {
   }
 
   private calculateAge(dateString) {
+    if (dateString.includes('-') && dateString.includes('T')) {
+      const isoDate = new Date(dateString);
+      const day = String(isoDate.getDate()).padStart(2, '0');
+      const month = String(isoDate.getMonth() + 1).padStart(2, '0');
+      const year = isoDate.getFullYear();
+      dateString = `${day}.${month}.${year}`;
+    }
+
     const dateParts = dateString.split('.');
 
     if (dateParts.length !== 3) {
@@ -225,13 +231,13 @@ export class StatisticsService {
       throw new Error('Date is not in good format');
     }
 
-    const today = new Date();
     const birthDate = new Date(year, month - 1, day);
 
     if (isNaN(birthDate.getTime())) {
       throw new Error('Date is not in good format');
     }
 
+    const today = new Date();
     const yearsDiff = today.getFullYear() - birthDate.getFullYear();
     const monthsDiff = today.getMonth() - birthDate.getMonth();
     const daysDiff = today.getDate() - birthDate.getDate();
