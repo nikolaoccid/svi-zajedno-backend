@@ -48,6 +48,7 @@ export class ProjectAssociateService {
           { email: ILike(`%${query}%`) },
           { mobilePhone: ILike(`%${query}%`) },
           { contactPerson: ILike(`%${query}%`) },
+          { category: { categoryName: ILike(`%${query}%`) } },
         ],
       },
     );
