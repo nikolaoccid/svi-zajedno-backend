@@ -30,7 +30,9 @@ export class StatisticsService {
   ) {}
 
   async getProjectAssociatesStatistics(schoolYearId: number) {
-    const categories = await this.categoryRepository.find();
+    const categories = await this.categoryRepository.find({
+      order: { categoryName: 'ASC' },
+    });
 
     const statistics = [];
 
@@ -90,7 +92,7 @@ export class StatisticsService {
           },
         });
 
-      const categoryStatistics = {
+      const categoryStatistics: any = {
         totalAssociates: totalProjectAssociatesCount,
         totalAssociatesPerCategory: projectAssociatesCount,
         categoryName: category.categoryName,
@@ -102,6 +104,9 @@ export class StatisticsService {
 
       statistics.push(categoryStatistics);
     }
+    statistics.sort(
+      (a, b) => b.totalAssociatesPerCategory - a.totalAssociatesPerCategory,
+    );
 
     return statistics;
   }
