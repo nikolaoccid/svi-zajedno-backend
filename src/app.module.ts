@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { AxiosErrorFilter } from './axios-error.filter';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
+import { ContactModule } from './contact/contact.module';
+import { Contact } from './contact/entities/contact.entity';
 import { ExportModule } from './export/export.module';
 import { ProjectAssociate } from './project-associate/entities/project-associate.entity';
 import { ProjectAssociateModule } from './project-associate/project-associate.module';
@@ -54,6 +56,7 @@ export const dbModule = TypeOrmModule.forRootAsync({
       Activity,
       StudentOnSchoolYear,
       StudentOnActivity,
+      Contact,
     ],
     migrationsTableName: 'migrations',
     migrations: ['dist/migrations/*.{ts,js}'],
@@ -99,6 +102,7 @@ const classSerializerInterceptorModule = {
     StudentOnActivityModule,
     StatisticsModule,
     ExportModule,
+    ContactModule,
   ],
   controllers: [],
   providers: [
