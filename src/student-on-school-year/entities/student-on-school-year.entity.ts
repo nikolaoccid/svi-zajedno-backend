@@ -53,7 +53,7 @@ export class StudentOnSchoolYear {
   @Column({ default: ProtectionType.PREPORUKA })
   protectionType: ProtectionType;
 
-  @Column({ default: new Date().toDateString() })
+  @Column({ default: new Date(), type: 'timestamptz' })
   dateOfEnrollment: Date;
 
   @OneToMany(

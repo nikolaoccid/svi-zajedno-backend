@@ -213,35 +213,7 @@ export class StatisticsService {
     return statistics;
   }
 
-  private calculateAge(dateString) {
-    if (dateString.includes('-') && dateString.includes('T')) {
-      const isoDate = new Date(dateString);
-      const day = String(isoDate.getDate()).padStart(2, '0');
-      const month = String(isoDate.getMonth() + 1).padStart(2, '0');
-      const year = isoDate.getFullYear();
-      dateString = `${day}.${month}.${year}`;
-    }
-
-    const dateParts = dateString.split('.');
-
-    if (dateParts.length !== 3) {
-      throw new Error('Date is not in good format, got: ' + dateString);
-    }
-
-    const day = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10);
-    const year = parseInt(dateParts[2], 10);
-
-    if (isNaN(day) || isNaN(month) || isNaN(year)) {
-      throw new Error('Date is not in good format');
-    }
-
-    const birthDate = new Date(year, month - 1, day);
-
-    if (isNaN(birthDate.getTime())) {
-      throw new Error('Date is not in good format');
-    }
-
+  private calculateAge(birthDate: Date) {
     const today = new Date();
     const yearsDiff = today.getFullYear() - birthDate.getFullYear();
     const monthsDiff = today.getMonth() - birthDate.getMonth();

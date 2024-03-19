@@ -30,10 +30,10 @@ export class StudentOnActivity {
   @Column()
   studentOnSchoolYearId: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'timestamptz' })
   enrollmentDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'timestamptz' })
   unenrollmentDate: Date;
 
   @ManyToOne(() => Activity, (activity) => activity.studentOnActivity)

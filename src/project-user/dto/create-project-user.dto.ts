@@ -28,7 +28,7 @@ export class CreateProjectUserDto {
   childSurname: string;
 
   @IsNotEmpty()
-  dateOfBirth: string;
+  dateOfBirth: Date;
 
   @IsNotEmpty()
   address: string;
