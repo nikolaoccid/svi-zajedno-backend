@@ -28,7 +28,7 @@ export class UpdateProjectUserDto extends PartialType(CreateProjectUserDto) {
   childSurname: string;
 
   @IsNotEmpty()
-  dateOfBirth: string;
+  dateOfBirth: Date;
 
   @IsNotEmpty()
   address: string;

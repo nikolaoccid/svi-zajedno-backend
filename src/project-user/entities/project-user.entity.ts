@@ -36,8 +36,8 @@ export class ProjectUser {
   @Column()
   childSurname: string;
 
-  @Column()
-  dateOfBirth: string;
+  @Column({ type: 'timestamptz' })
+  dateOfBirth: Date;
 
   @Column()
   address: string;

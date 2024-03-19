@@ -177,26 +177,30 @@ export class ExportService {
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
-      { header: 'Status aktivnosti' },
       { header: 'Datum upisa' },
+      { header: 'Datum ispisa' },
+      { header: 'Status aktivnosti' },
 
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
-      { header: 'Status aktivnosti' },
       { header: 'Datum upisa' },
+      { header: 'Datum ispisa' },
+      { header: 'Status aktivnosti' },
 
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
-      { header: 'Status aktivnosti' },
       { header: 'Datum upisa' },
+      { header: 'Datum ispisa' },
+      { header: 'Status aktivnosti' },
 
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
-      { header: 'Status aktivnosti' },
       { header: 'Datum upisa' },
+      { header: 'Datum ispisa' },
+      { header: 'Status aktivnosti' },
     ];
     sheet.columns.forEach((column) => {
       column.width = column.header.length < 25 ? 25 : column.header.length;
@@ -221,7 +225,7 @@ export class ExportService {
             user.user.email,
             user.user.mobilePhone,
             `${user.user.childName} ${user.user.childSurname}`,
-            user.user.dateOfBirth,
+            this.convertISODateToHumanReadableDate(user.user.dateOfBirth),
             user.user.oib,
             `${user.user.address}, ${user.user.city}`,
             user.user.school,
@@ -235,8 +239,9 @@ export class ExportService {
               activity.activity.activityPrice !== 0
                 ? activity.activity.activityPrice + ' EUR'
                 : 'Besplatno',
+              this.convertISODateToHumanReadableDate(activity.enrollmentDate),
+              this.convertISODateToHumanReadableDate(activity.unenrollmentDate),
               activity.activity.activityStatus,
-              activity.createdAt,
             );
           });
           return rowData;
@@ -245,5 +250,22 @@ export class ExportService {
       }
     }
     return preparedData;
+  }
+
+  convertISODateToHumanReadableDate(inputDate: Date): string | undefined {
+    if (!(inputDate instanceof Date) || isNaN(inputDate.getTime())) return;
+
+    try {
+      const year = inputDate.getUTCFullYear();
+      const month = inputDate.getUTCMonth() + 1;
+      const day = inputDate.getUTCDate();
+      return `${day.toString().padStart(2, '0')}.${month
+        .toString()
+        .padStart(2, '0')}.${year}`;
+    } catch (e) {
+      console.log('error converting date', e);
+    }
+
+    return undefined;
   }
 }
