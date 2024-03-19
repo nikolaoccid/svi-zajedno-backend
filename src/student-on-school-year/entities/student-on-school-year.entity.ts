@@ -47,10 +47,10 @@ export class StudentOnSchoolYear {
   @Column()
   status: Status;
 
-  @Column({ default: SourceSystem.CZSS })
+  @Column({ default: SourceSystem.CZSS, enum: SourceSystem })
   sourceSystem: SourceSystem;
 
-  @Column({ default: ProtectionType.PREPORUKA })
+  @Column({ default: ProtectionType.PREPORUKA, enum: ProtectionType })
   protectionType: ProtectionType;
 
   @Column({ default: new Date(), type: 'timestamptz' })
