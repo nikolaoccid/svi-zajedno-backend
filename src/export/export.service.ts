@@ -233,6 +233,7 @@ export class ExportService {
             user.status,
           ];
           activities.forEach((activity) => {
+            // console.log('activity', activity);
             rowData.push(
               activity.activity.activityName,
               activity.activity.projectAssociate.clubName,
@@ -241,7 +242,7 @@ export class ExportService {
                 : 'Besplatno',
               this.convertISODateToHumanReadableDate(activity.enrollmentDate),
               this.convertISODateToHumanReadableDate(activity.unenrollmentDate),
-              activity.activity.activityStatus,
+              activity.activityStatus,
             );
           });
           return rowData;
