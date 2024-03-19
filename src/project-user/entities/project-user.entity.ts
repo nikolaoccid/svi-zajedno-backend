@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Contact } from '../../contact/entities/contact.entity';
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
 export enum Gender {
   Male = 'male',
@@ -53,6 +54,7 @@ export class ProjectUser {
 
   @Column()
   email: string;
+
   @OneToMany(
     () => StudentOnSchoolYear,
     (studentOnSchoolYear) => studentOnSchoolYear.user,

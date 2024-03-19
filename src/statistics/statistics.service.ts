@@ -19,14 +19,10 @@ export class StatisticsService {
     private readonly projectAssociateRepository: Repository<ProjectAssociate>,
     @InjectRepository(Activity)
     private readonly activityRepository: Repository<Activity>,
-    @InjectRepository(SchoolYear)
-    private readonly schoolYearRepository: Repository<SchoolYear>,
     @InjectRepository(StudentOnActivity)
     private readonly studentOnActivityRepository: Repository<StudentOnActivity>,
     @InjectRepository(ProjectUser)
     private readonly projectUserRepository: Repository<ProjectUser>,
-    @InjectRepository(StudentOnSchoolYear)
-    private readonly studentOnSchoolYearRepository: Repository<StudentOnSchoolYear>,
   ) {}
 
   async getProjectAssociatesStatistics(schoolYearId: number) {
@@ -185,8 +181,11 @@ export class StatisticsService {
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
           if (studentOnActivity.activityStatus === 'active') {
             statistics.activeActivities++;
-            statistics.totalProjectValue +=
-              studentOnActivity.activity.activityPrice * 10;
+            statistics.totalProjectValue += this.calculateActivityWorth(
+              studentOnActivity.activity.activityPrice,
+              studentOnActivity.enrollmentDate,
+              studentOnActivity.unenrollmentDate,
+            );
           } else if (studentOnActivity.activityStatus === 'inactive') {
             statistics.inactiveActivities++;
             statistics.totalProjectValue +=
@@ -224,5 +223,42 @@ export class StatisticsService {
     }
 
     return yearsDiff;
+  }
+
+  private calculateActivityWorth(
+    activityPrice: number,
+    enrollmentDate: Date,
+    unenrollmentDate: Date,
+  ) {
+    const activityPriceValuation = activityPrice === 0 ? 20 : activityPrice;
+    const activityLength = this.calculateActivityLength(
+      enrollmentDate,
+      unenrollmentDate,
+    );
+    return activityPriceValuation * activityLength;
+  }
+  private calculateActivityLength(
+    enrollmentDate: Date,
+    unenrollmentDate: Date,
+  ) {
+    let biggerDate = unenrollmentDate;
+    let smallerDate = enrollmentDate;
+
+    if (!unenrollmentDate) return 10;
+
+    if (enrollmentDate < unenrollmentDate) {
+      biggerDate = unenrollmentDate;
+      smallerDate = enrollmentDate;
+    } else {
+      biggerDate;
+    }
+
+    const years = biggerDate.getFullYear() - smallerDate.getFullYear();
+    const months = biggerDate.getMonth() - smallerDate.getMonth();
+    const days = biggerDate.getDate() - smallerDate.getDate();
+
+    const totalPayments = years * 12 + months + (days > 0 ? 1 : 0);
+
+    return totalPayments;
   }
 }
