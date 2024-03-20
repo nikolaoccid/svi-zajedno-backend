@@ -86,5 +86,9 @@
     "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
+  },
+  "engines": {
+    "node": "18.15.0",
+    "npm": "9.5.x"
   }
 }
