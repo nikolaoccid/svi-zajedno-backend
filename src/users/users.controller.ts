@@ -36,7 +36,13 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(
+    @AuthenticatedUser() user: User,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    if (!user) {
+      return new UnauthorizedException();
+    }
     return await this.usersService.create(createUserDto);
   }
 }
