@@ -27,7 +27,7 @@ export class User {
   @Column({ default: 'User' })
   name: string;
 
-  @Column({ default: UserRole.Admin })
+  @Column({ default: UserRole.StandardUser })
   role: UserRole;
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
