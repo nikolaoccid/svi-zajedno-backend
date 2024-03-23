@@ -60,6 +60,28 @@ export class StudentOnSchoolYearService {
     if (query && status) {
       res = await this.studentOnSchoolYear.find({
         where: [
+          {
+            schoolYearId,
+            studentOnActivity: {
+              activity: { activityName: ILike(`%${query}%`) },
+            },
+          },
+          {
+            schoolYearId,
+            studentOnActivity: {
+              activity: { projectAssociate: { clubName: ILike(`%${query}%`) } },
+            },
+          },
+          {
+            schoolYearId,
+            studentOnActivity: {
+              activity: {
+                projectAssociate: {
+                  category: { categoryName: ILike(`%${query}%`) },
+                },
+              },
+            },
+          },
           { schoolYearId, status, user: { oib: ILike(`%${query}%`) } },
           { schoolYearId, status, user: { childName: ILike(`%${query}%`) } },
           { schoolYearId, status, user: { childSurname: ILike(`%${query}%`) } },
