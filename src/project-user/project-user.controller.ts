@@ -54,16 +54,29 @@ export class ProjectUserController {
     type: Number,
     required: false,
   })
+  @ApiQuery({
+    name: 'schoolYearId',
+    type: Number,
+    required: false,
+  })
   findAll(
     @AuthenticatedUser() user: User,
     @Query() query: { query: string },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+    @Query('schoolYearId') schoolYearId: number,
   ):
     | Promise<ProjectUser[]>
     | Promise<Pagination<ProjectUser, IPaginationMeta>> {
     if (user.role !== UserRole.Admin) {
       throw new UnauthorizedException();
+    }
+    if (query.query && schoolYearId) {
+      return this.projectUserService.findOneByQueryAndStudentOnActivity(
+        query.query,
+        schoolYearId,
+        { page, limit },
+      );
     }
     if (query.query) {
       return this.projectUserService.findOneByQuery(query.query, {

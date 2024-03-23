@@ -17,5 +17,6 @@ import { StudentOnActivityService } from './student-on-activity.service';
   ],
   controllers: [StudentOnActivityController],
   providers: [StudentOnActivityService],
+  exports: [StudentOnActivityService],
 })
 export class StudentOnActivityModule {}

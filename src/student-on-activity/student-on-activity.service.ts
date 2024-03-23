@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import { ActivityService } from '../activity/activity.service';
 import { SchoolYearService } from '../school-year/school-year.service';
@@ -48,6 +48,42 @@ export class StudentOnActivityService {
         'activity.projectAssociate',
       ],
       order: { activity: { activityName: 'ASC' } },
+    });
+  }
+
+  async getIdsFromSchoolYearAndQuery(schoolYearId: number, query: string) {
+    const activities = await this.findAllBySchoolYearAndQuery(
+      schoolYearId,
+      query,
+    );
+    return activities.flatMap(
+      (activity) => activity.studentOnSchoolYear.user.id,
+    );
+  }
+  async findAllBySchoolYearAndQuery(schoolYearId: number, query: string) {
+    return await this.studentOnActivity.find({
+      where: [
+        {
+          activity: { activityName: ILike(`%${query}%`) },
+          studentOnSchoolYear: { schoolYear: { id: schoolYearId } },
+        },
+        {
+          activity: {
+            projectAssociate: {
+              clubName: ILike(`%${query}%`),
+            },
+          },
+        },
+        {
+          activity: {
+            projectAssociate: {
+              category: { categoryName: ILike(`%${query}%`) },
+            },
+          },
+          studentOnSchoolYear: { schoolYear: { id: schoolYearId } },
+        },
+      ],
+      relations: ['studentOnSchoolYear', 'studentOnSchoolYear.user'],
     });
   }
 

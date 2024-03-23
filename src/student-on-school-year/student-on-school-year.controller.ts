@@ -14,7 +14,9 @@ import {
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
+import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { User, UserRole } from '../users/user.entity';
+import { Pagination } from '../utils/pagination';
 import { CreateStudentOnSchoolYearDto } from './dto/create-student-on-school-year.dto';
 import { UpdateStudentOnSchoolYearDto } from './dto/update-student-on-school-year.dto';
 import { Status } from './entities/student-on-school-year.entity';
@@ -114,24 +116,8 @@ export class StudentOnSchoolYearController {
         status.status,
         sortBy,
       );
-    const totalCount = allItems.length;
-    const totalPages = Math.ceil(totalCount / limit);
-    const currentPage = Math.min(totalPages, Math.max(1, page)); // Ensure currentPage is within valid range
-    const startIndex = (currentPage - 1) * limit;
-    const endIndex = Math.min(startIndex + limit, totalCount);
-
-    const items = allItems.slice(startIndex, endIndex);
-
-    return {
-      items: items,
-      meta: {
-        currentPage: currentPage,
-        itemCount: items.length,
-        itemsPerPage: limit,
-        totalItems: totalCount,
-        totalPages: totalPages,
-      },
-    };
+    const pagination = new Pagination<ProjectUser>(allItems, { page, limit });
+    return pagination.getPage();
   }
 
   @Get(':id')
