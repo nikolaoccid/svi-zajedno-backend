@@ -26,85 +26,56 @@ export class StatisticsService {
   ) {}
 
   async getProjectAssociatesStatistics(schoolYearId: number) {
-    const categories = await this.categoryRepository.find({
-      order: { categoryName: 'ASC' },
+    const totalAssociates = await this.projectAssociateRepository.count({
+      where: { activity: { schoolYear: { id: schoolYearId } } },
     });
 
-    const statistics = [];
+    const queryBuilder = this.categoryRepository.createQueryBuilder('cat');
 
-    for (const category of categories) {
-      const projectAssociatesCount =
-        await this.projectAssociateRepository.count({
-          where: {
-            category: { id: category.id },
-            activity: { schoolYear: { id: schoolYearId } },
-          },
-        });
+    const statistics = await queryBuilder
+      .select([
+        'cat.categoryName AS "categoryName"',
+        'COUNT(DISTINCT pa.id) AS "totalAssociatesPerCategory"',
+        'COUNT(DISTINCT act.id) AS "totalAssociatesPerCategory"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN act.id END) AS "totalFreeActivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN act.id END) AS "totalPaidActivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) AS "usersAttendingFreeActivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END) AS "usersAttendingPaidActivities"',
+      ])
+      .leftJoin('cat.projectAssociate', 'pa')
+      .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
+        schoolYearId,
+      })
+      .leftJoin('act.studentOnActivity', 'soa')
+      .groupBy('cat.id')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(DISTINCT pa.id)', 'totalAssociatesPerCategory')
+          .from('project_associate', 'pa')
+          .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
+            schoolYearId,
+          })
+          .where('cat.id = pa.categoryId');
+      }, 'totalAssociatesPerCategory')
+      .getRawMany();
 
-      const totalProjectAssociatesCount =
-        await this.projectAssociateRepository.count({
-          where: { activity: { schoolYear: { id: schoolYearId } } },
-        });
+    const statisticsWithNumbers = statistics.map((statistic) => ({
+      totalAssociates,
+      totalAssociatesPerCategory: parseInt(
+        statistic.totalAssociatesPerCategory,
+      ),
+      categoryName: statistic.categoryName,
+      totalFreeActivities: parseInt(statistic.totalFreeActivities),
+      totalPaidActivities: parseInt(statistic.totalPaidActivities),
+      usersAttendingFreeActivities: parseInt(
+        statistic.usersAttendingFreeActivities,
+      ),
+      usersAttendingPaidActivities: parseInt(
+        statistic.usersAttendingPaidActivities,
+      ),
+    }));
 
-      // Count free activities in the category
-      const freeActivitiesCount = await this.activityRepository.count({
-        where: {
-          projectAssociate: { category: { id: category.id } },
-          activityPrice: 0,
-          schoolYear: { id: schoolYearId },
-        },
-      });
-
-      // Count paid activities in the category
-      const paidActivitiesCount = await this.activityRepository.count({
-        where: {
-          projectAssociate: { category: { id: category.id } },
-          activityPrice: MoreThan(0),
-          schoolYear: { id: schoolYearId },
-        },
-      });
-
-      // Count users attending free activities in the category
-      const usersAttendingFreeActivities =
-        await this.studentOnActivityRepository.count({
-          where: {
-            activity: {
-              projectAssociate: { category: { id: category.id } },
-              activityPrice: 0,
-              schoolYear: { id: schoolYearId },
-            },
-          },
-        });
-
-      // Count users attending paid activities in the category
-      const usersAttendingPaidActivities =
-        await this.studentOnActivityRepository.count({
-          where: {
-            activity: {
-              projectAssociate: { category: { id: category.id } },
-              activityPrice: MoreThan(0),
-              schoolYear: { id: schoolYearId },
-            },
-          },
-        });
-
-      const categoryStatistics: any = {
-        totalAssociates: totalProjectAssociatesCount,
-        totalAssociatesPerCategory: projectAssociatesCount,
-        categoryName: category.categoryName,
-        totalFreeActivities: freeActivitiesCount,
-        totalPaidActivities: paidActivitiesCount,
-        usersAttendingFreeActivities,
-        usersAttendingPaidActivities,
-      };
-
-      statistics.push(categoryStatistics);
-    }
-    statistics.sort(
-      (a, b) => b.totalAssociatesPerCategory - a.totalAssociatesPerCategory,
-    );
-
-    return statistics;
+    return statisticsWithNumbers;
   }
 
   async getProjectUserStatistics(schoolYearId: number) {
