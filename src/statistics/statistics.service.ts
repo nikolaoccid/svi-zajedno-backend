@@ -41,6 +41,7 @@ export class StatisticsService {
         'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN act.id END) AS "totalPaidActivities"',
         'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) AS "usersAttendingFreeActivities"',
         'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END) AS "usersAttendingPaidActivities"',
+        '(COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) + COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END)) AS "totalUsersPerCategory"',
       ])
       .leftJoin('cat.projectAssociate', 'pa')
       .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
@@ -55,7 +56,10 @@ export class StatisticsService {
           .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
             schoolYearId,
           })
-          .where('cat.id = pa.categoryId');
+          .where('cat.id = pa.categoryId')
+          .andWhere('act.schoolYearId = :schoolYearId', {
+            schoolYearId,
+          });
       }, 'totalAssociatesPerCategory')
       .getRawMany();
 
@@ -73,6 +77,7 @@ export class StatisticsService {
       usersAttendingPaidActivities: parseInt(
         statistic.usersAttendingPaidActivities,
       ),
+      totalUsersPerCategory: parseInt(statistic.totalUsersPerCategory),
     }));
 
     return statisticsWithNumbers;
