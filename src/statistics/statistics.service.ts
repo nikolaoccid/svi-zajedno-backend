@@ -34,14 +34,14 @@ export class StatisticsService {
 
     const statistics = await queryBuilder
       .select([
-        'cat.categoryName AS "categoryName"',
-        'COUNT(DISTINCT pa.id) AS "totalAssociatesPerCategory"',
-        'COUNT(DISTINCT act.id) AS "totalAssociatesPerCategory"',
-        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN act.id END) AS "totalFreeActivities"',
-        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN act.id END) AS "totalPaidActivities"',
-        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) AS "usersAttendingFreeActivities"',
-        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END) AS "usersAttendingPaidActivities"',
-        '(COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) + COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END)) AS "totalUsersPerCategory"',
+        'cat.categoryName AS "categoryname"',
+        'COUNT(DISTINCT pa.id) AS "totalassociatespercategory"',
+        'COUNT(DISTINCT act.id) AS "totalassociatespercategory_main"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN act.id END) AS "totalfreeactivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN act.id END) AS "totalpaidactivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) AS "usersattendingfreeactivities"',
+        'COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END) AS "usersattendingpaidactivities"',
+        '(COUNT(DISTINCT CASE WHEN act.activityPrice = 0 THEN soa.id END) + COUNT(DISTINCT CASE WHEN act.activityPrice > 0 THEN soa.id END)) AS "totaluserspercategory"',
       ])
       .leftJoin('cat.projectAssociate', 'pa')
       .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
@@ -51,7 +51,7 @@ export class StatisticsService {
       .groupBy('cat.id')
       .addSelect((subQuery) => {
         return subQuery
-          .select('COUNT(DISTINCT pa.id)', 'totalAssociatesPerCategory')
+          .select('COUNT(DISTINCT pa.id)', 'totalassociatespercategory_sub')
           .from('project_associate', 'pa')
           .leftJoin('pa.activity', 'act', 'act.schoolYearId = :schoolYearId', {
             schoolYearId,
@@ -60,24 +60,26 @@ export class StatisticsService {
           .andWhere('act.schoolYearId = :schoolYearId', {
             schoolYearId,
           });
-      }, 'totalAssociatesPerCategory')
+      }, 'totalassociatespercategory_sub')
+      .orderBy('totaluserspercategory', 'DESC')
+      .addOrderBy('totalassociatespercategory_main', 'DESC')
       .getRawMany();
 
     const statisticsWithNumbers = statistics.map((statistic) => ({
       totalAssociates,
       totalAssociatesPerCategory: parseInt(
-        statistic.totalAssociatesPerCategory,
+        statistic.totalassociatespercategory,
       ),
-      categoryName: statistic.categoryName,
-      totalFreeActivities: parseInt(statistic.totalFreeActivities),
-      totalPaidActivities: parseInt(statistic.totalPaidActivities),
+      categoryName: statistic.categoryname,
+      totalFreeActivities: parseInt(statistic.totalfreeactivities),
+      totalPaidActivities: parseInt(statistic.totalpaidactivities),
       usersAttendingFreeActivities: parseInt(
-        statistic.usersAttendingFreeActivities,
+        statistic.usersattendingfreeactivities,
       ),
       usersAttendingPaidActivities: parseInt(
-        statistic.usersAttendingPaidActivities,
+        statistic.usersattendingpaidactivities,
       ),
-      totalUsersPerCategory: parseInt(statistic.totalUsersPerCategory),
+      totalUsersPerCategory: parseInt(statistic.totaluserspercategory),
     }));
 
     return statisticsWithNumbers;
