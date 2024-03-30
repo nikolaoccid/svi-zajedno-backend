@@ -1,4 +1,4 @@
-export class ProjectAssociatesStatistics {
+export class ProjectAssociatesStatisticsResponse {
   totalAssociates: number;
   totalAssociatesPerCategory: number;
   categoryName: string;
@@ -6,4 +6,5 @@ export class ProjectAssociatesStatistics {
   totalPaidActivities: number;
   usersAttendingFreeActivities: number;
   usersAttendingPaidActivities: number;
+  totalUsersPerCategory: number;
 }

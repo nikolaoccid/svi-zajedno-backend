@@ -9,6 +9,8 @@ import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { SchoolYear } from '../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../student-on-activity/entities/student-on-activity.entity';
 import { StudentOnSchoolYear } from '../student-on-school-year/entities/student-on-school-year.entity';
+import { ProjectAssociatesStatisticsResponse } from './dto/project-associate.dto';
+import { ProjectUserStatisticsResponse } from './dto/project-user.dto';
 
 @Injectable()
 export class StatisticsService {
@@ -25,7 +27,9 @@ export class StatisticsService {
     private readonly projectUserRepository: Repository<ProjectUser>,
   ) {}
 
-  async getProjectAssociatesStatistics(schoolYearId: number) {
+  async getProjectAssociatesStatistics(
+    schoolYearId: number,
+  ): Promise<ProjectAssociatesStatisticsResponse[]> {
     const totalAssociates = await this.projectAssociateRepository.count({
       where: { activity: { schoolYear: { id: schoolYearId } } },
     });
@@ -99,7 +103,7 @@ export class StatisticsService {
       })
       .getMany();
 
-    const statistics = {
+    const statistics: ProjectUserStatisticsResponse = {
       totalUsers: users.length,
       maleUsers: 0,
       femaleUsers: 0,
@@ -112,8 +116,15 @@ export class StatisticsService {
         age13to18: 0,
         age19to24: 0,
       },
-      sourceSystems: {},
-      protectionTypes: {},
+      sourceSystems: {
+        czss: 0,
+        obiteljskicentar: 0,
+      },
+      protectionTypes: {
+        zmn: 0,
+        preporuka: 0,
+        udomiteljstvo: 0,
+      },
 
       activeActivities: 0,
       inactiveActivities: 0,
