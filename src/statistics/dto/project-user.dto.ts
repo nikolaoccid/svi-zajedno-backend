@@ -12,7 +12,8 @@ export class ProjectUserStatisticsResponse {
   inactiveActivities: number;
   pendingActivities: number;
   totalActivities: number;
-  totalProjectValue: number;
+  estimatedProjectValue: number;
+  realProjectCosts: number;
   associatesTotalActivities: number;
   associatesActiveActivities: number;
   associatesInactiveActivities: number;
