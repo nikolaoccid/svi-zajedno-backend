@@ -130,7 +130,8 @@ export class StatisticsService {
       inactiveActivities: 0,
       pendingActivities: 0,
       totalActivities: 0,
-      totalProjectValue: 0,
+      estimatedProjectValue: 0,
+      realProjectCosts: 0,
 
       associatesTotalActivities: 0,
       associatesActiveActivities: 0,
@@ -170,19 +171,23 @@ export class StatisticsService {
         for (const studentOnActivity of studentOnSchoolYear.studentOnActivity) {
           if (studentOnActivity.activityStatus === 'active') {
             statistics.activeActivities++;
-            statistics.totalProjectValue += this.calculateActivityWorth(
-              studentOnActivity.activity.activityPrice,
-              studentOnActivity.enrollmentDate,
-              studentOnActivity.unenrollmentDate,
-            );
           } else if (studentOnActivity.activityStatus === 'inactive') {
             statistics.inactiveActivities++;
-            statistics.totalProjectValue +=
-              studentOnActivity.activity.activityPrice;
           } else if (studentOnActivity.activityStatus === 'pending') {
             statistics.pendingActivities++;
           }
           statistics.totalActivities++;
+
+          statistics.estimatedProjectValue += this.calculateActivityWorth(
+            studentOnActivity.activity.activityPrice,
+            studentOnActivity.enrollmentDate,
+            studentOnActivity.unenrollmentDate,
+          );
+          statistics.realProjectCosts += this.calculateActivityWorth(
+            studentOnActivity.actualActivityCost,
+            studentOnActivity.enrollmentDate,
+            studentOnActivity.unenrollmentDate,
+          );
         }
       }
     }

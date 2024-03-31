@@ -177,6 +177,7 @@ export class ExportService {
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
+      { header: 'Ugovorena cijena' },
       { header: 'Datum upisa' },
       { header: 'Datum ispisa' },
       { header: 'Status aktivnosti' },
@@ -184,6 +185,7 @@ export class ExportService {
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
+      { header: 'Ugovorena cijena' },
       { header: 'Datum upisa' },
       { header: 'Datum ispisa' },
       { header: 'Status aktivnosti' },
@@ -191,6 +193,7 @@ export class ExportService {
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
+      { header: 'Ugovorena cijena' },
       { header: 'Datum upisa' },
       { header: 'Datum ispisa' },
       { header: 'Status aktivnosti' },
@@ -198,6 +201,7 @@ export class ExportService {
       { header: 'Aktivnost' },
       { header: 'Klub' },
       { header: 'Cijena' },
+      { header: 'Ugovorena cijena' },
       { header: 'Datum upisa' },
       { header: 'Datum ispisa' },
       { header: 'Status aktivnosti' },
@@ -233,12 +237,14 @@ export class ExportService {
             user.status,
           ];
           activities.forEach((activity) => {
-            // console.log('activity', activity);
             rowData.push(
               activity.activity.activityName,
               activity.activity.projectAssociate.clubName,
               activity.activity.activityPrice !== 0
                 ? activity.activity.activityPrice + ' EUR'
+                : 'Besplatno',
+              activity.actualActivityCost !== 0
+                ? activity.actualActivityCost + ' EUR'
                 : 'Besplatno',
               this.convertISODateToHumanReadableDate(activity.enrollmentDate),
               this.convertISODateToHumanReadableDate(activity.unenrollmentDate),

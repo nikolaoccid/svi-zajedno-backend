@@ -60,7 +60,7 @@ export const dbModule = TypeOrmModule.forRootAsync({
     ],
     migrationsTableName: 'migrations',
     migrations: ['dist/migrations/*.{ts,js}'],
-    synchronize: false,
+    synchronize: true,
     logging: false,
     ssl: config.databaseDisableSsl() != 'true',
     cli: {

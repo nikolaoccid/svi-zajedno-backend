@@ -41,6 +41,9 @@ export class StudentOnActivity {
   @Column()
   activityId: number;
 
+  @Column({ default: 0 })
+  actualActivityCost: number;
+
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

@@ -14,6 +14,10 @@ export class CreateStudentOnActivityDto {
   @IsNotEmpty()
   activityStatus: ActivityStatus;
 
+  @IsNotEmpty()
+  @IsNumber()
+  actualActivityCost: number;
+
   @IsOptional()
   enrollmentDate: Date;
 
