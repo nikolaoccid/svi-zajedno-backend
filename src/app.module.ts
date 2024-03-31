@@ -25,6 +25,7 @@ import { StudentOnActivity } from './student-on-activity/entities/student-on-act
 import { StudentOnActivityModule } from './student-on-activity/student-on-activity.module';
 import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
 import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
+import { UserRequestModule } from './user-request/user-request.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { Config } from './utils/config.service';
@@ -103,6 +104,7 @@ const classSerializerInterceptorModule = {
     StatisticsModule,
     ExportModule,
     ContactModule,
+    UserRequestModule,
   ],
   controllers: [],
   providers: [
