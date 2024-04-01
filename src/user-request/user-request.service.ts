@@ -14,16 +14,21 @@ export class UserRequestService {
   ) {}
 
   async findAll(): Promise<UserRequest[]> {
-    return this.userRequestRepository.find();
+    const records = await this.userRequestRepository.find();
+    return records;
+  }
+
+  async findWithCustomWhere(where: any) {
+    return await this.userRequestRepository.find({ where: where });
   }
 
   async findOne(id: number): Promise<UserRequest> {
-    return this.userRequestRepository.findOne({ where: { id } });
+    return await this.userRequestRepository.findOne({ where: { id } });
   }
 
   async create(userRequestData: CreateUserRequestDto): Promise<UserRequest> {
     const userRequest = this.userRequestRepository.create(userRequestData);
-    return this.userRequestRepository.save(userRequest);
+    return await this.userRequestRepository.save(userRequest);
   }
 
   async update(
@@ -34,7 +39,29 @@ export class UserRequestService {
     return this.userRequestRepository.findOne({ where: { id } });
   }
 
-  async remove(id: number): Promise<void> {
-    await this.userRequestRepository.delete(id);
+  async remove(id: number) {
+    return await this.userRequestRepository.delete(id);
+  }
+
+  async findAllByStudentOnSchoolYearAndActivity(
+    studentOnSchoolYearId: number,
+    studentOnActivityId: number,
+  ) {
+    return await this.findWithCustomWhere({
+      studentOnSchoolYearId: studentOnSchoolYearId,
+      studentOnActivityId: studentOnActivityId,
+    });
+  }
+
+  async findAllByStudentOnSchoolYear(studentOnSchoolYearId: any) {
+    return await this.findWithCustomWhere({
+      studentOnSchoolYearId: studentOnSchoolYearId,
+    });
+  }
+
+  async findAllByStudentOnActivity(studentOnActivityId: any) {
+    return await this.findWithCustomWhere({
+      studentOnActivityId: studentOnActivityId,
+    });
   }
 }

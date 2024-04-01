@@ -48,13 +48,10 @@ export class UserRequest extends RequestEntity {
   @ManyToOne(
     () => StudentOnSchoolYear,
     (studentOnSchoolYear) => studentOnSchoolYear.userRequests,
-    {
-      nullable: true,
-    },
   )
   studentOnSchoolYear: StudentOnSchoolYear;
 
-  @Column({ nullable: true })
+  @Column()
   studentOnSchoolYearId: number;
 
   @ManyToOne(
