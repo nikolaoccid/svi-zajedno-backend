@@ -6,7 +6,6 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthInterceptor } from './auth.interceptor';
 import { AuthService } from './auth.service';
-import { JwtMiddleware } from './jwt.middleware';
 import { JwtService } from './jwt.service';
 
 @Module({
@@ -21,10 +20,6 @@ import { JwtService } from './jwt.service';
     JwtService,
   ],
   controllers: [AuthController],
-  exports: [],
+  exports: [JwtService],
 })
-export class AuthModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes('*');
-  }
-}
+export class AuthModule {}

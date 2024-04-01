@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Activity } from '../../activity/entities/activity.entity';
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
+import { UserRequest } from '../../user-request/entities/user-request.entity';
 export enum ActivityStatus {
   Active = 'active',
   Inactive = 'inactive',
@@ -43,6 +45,13 @@ export class StudentOnActivity {
 
   @Column({ default: 0 })
   actualActivityCost: number;
+
+  @OneToMany(
+    () => UserRequest,
+    (userRequest) => userRequest.studentOnActivity,
+    { nullable: true },
+  )
+  userRequests: UserRequest[];
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
