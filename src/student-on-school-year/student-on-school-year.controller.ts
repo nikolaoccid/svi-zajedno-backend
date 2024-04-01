@@ -9,13 +9,10 @@ import {
   Patch,
   Post,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
 import { ProjectUser } from '../project-user/entities/project-user.entity';
-import { User, UserRole } from '../users/user.entity';
 import { Pagination } from '../utils/pagination';
 import { CreateStudentOnSchoolYearDto } from './dto/create-student-on-school-year.dto';
 import { UpdateStudentOnSchoolYearDto } from './dto/update-student-on-school-year.dto';
@@ -31,13 +28,7 @@ export class StudentOnSchoolYearController {
   ) {}
 
   @Post()
-  create(
-    @AuthenticatedUser() user: User,
-    @Body() createStudentOnSchoolYearDto: CreateStudentOnSchoolYearDto,
-  ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  create(@Body() createStudentOnSchoolYearDto: CreateStudentOnSchoolYearDto) {
     return this.studentOnSchoolYearService.create(createStudentOnSchoolYearDto);
   }
 
@@ -56,11 +47,7 @@ export class StudentOnSchoolYearController {
     @Query('userId', new DefaultValuePipe(0), ParseIntPipe) userId = 0,
     @Query('schoolYearId', new DefaultValuePipe(0), ParseIntPipe)
     schoolYearId = 0,
-    @AuthenticatedUser() user: User,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     if (userId === 0 && schoolYearId === 0) {
       return this.studentOnSchoolYearService.findAll();
     } else {
@@ -104,11 +91,7 @@ export class StudentOnSchoolYearController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
     @Query('sortBy') sortBy = undefined,
     @Param('schoolYearId') schoolYearId: string,
-    @AuthenticatedUser() user: User,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     const allItems =
       await this.studentOnSchoolYearService.findUsersBySchoolYear(
         +schoolYearId,
@@ -121,10 +104,7 @@ export class StudentOnSchoolYearController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.studentOnSchoolYearService.findOne(+id);
   }
 
@@ -132,11 +112,7 @@ export class StudentOnSchoolYearController {
   update(
     @Param('id') id: string,
     @Body() updateStudentOnSchoolYearDto: UpdateStudentOnSchoolYearDto,
-    @AuthenticatedUser() user: User,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.studentOnSchoolYearService.update(
       +id,
       updateStudentOnSchoolYearDto,
@@ -144,10 +120,7 @@ export class StudentOnSchoolYearController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.studentOnSchoolYearService.remove(+id);
   }
 }
