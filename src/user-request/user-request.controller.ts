@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { CreateUserRequestDto } from './dto/create-user-request.dto';
+import { UpdateUserRequestDto } from './dto/update-user-request.dto';
 import { UserRequest } from './entities/user-request.entity';
 import { UserRequestService } from './user-request.service';
 
@@ -20,7 +22,6 @@ export class UserRequestController {
 
   @Get()
   findAll(): Promise<UserRequest[]> {
-    console.log('UserRequestController.findAll()');
     return this.userRequestService.findAll();
   }
 
@@ -30,14 +31,14 @@ export class UserRequestController {
   }
 
   @Post()
-  create(@Body() userRequestData): Promise<UserRequest> {
+  create(@Body() userRequestData: CreateUserRequestDto): Promise<UserRequest> {
     return this.userRequestService.create(userRequestData);
   }
 
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() userRequestData,
+    @Body() userRequestData: UpdateUserRequestDto,
   ): Promise<UserRequest> {
     return this.userRequestService.update(+id, userRequestData);
   }

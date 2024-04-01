@@ -45,13 +45,17 @@ export class UserRequest extends RequestEntity {
   @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToOne(() => ProjectUser, (projectUser) => projectUser.userRequests, {
-    nullable: true,
-  })
-  projectUser: ProjectUser;
+  @ManyToOne(
+    () => StudentOnSchoolYear,
+    (studentOnSchoolYear) => studentOnSchoolYear.userRequests,
+    {
+      nullable: true,
+    },
+  )
+  studentOnSchoolYear: StudentOnSchoolYear;
 
   @Column({ nullable: true })
-  projectUserId: number;
+  studentOnSchoolYearId: number;
 
   @ManyToOne(
     () => StudentOnActivity,

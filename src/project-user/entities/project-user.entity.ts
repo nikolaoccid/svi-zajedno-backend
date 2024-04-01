@@ -61,11 +61,6 @@ export class ProjectUser {
   )
   studentOnSchoolYear: StudentOnSchoolYear[];
 
-  @OneToMany(() => UserRequest, (userRequest) => userRequest.projectUser, {
-    nullable: true,
-  })
-  userRequests: UserRequest[];
-
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
