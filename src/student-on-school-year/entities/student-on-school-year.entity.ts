@@ -19,6 +19,7 @@ export enum ProtectionType {
 import { ProjectUser } from '../../project-user/entities/project-user.entity';
 import { SchoolYear } from '../../school-year/entities/school-year.entity';
 import { StudentOnActivity } from '../../student-on-activity/entities/student-on-activity.entity';
+import { UserRequest } from '../../user-request/entities/user-request.entity';
 import { User } from '../../users/user.entity';
 export enum Status {
   Active = 'active',
