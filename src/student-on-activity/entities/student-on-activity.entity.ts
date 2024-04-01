@@ -49,7 +49,7 @@ export class StudentOnActivity {
   @OneToMany(
     () => UserRequest,
     (userRequest) => userRequest.studentOnActivity,
-    { nullable: true },
+    { nullable: true, eager: true },
   )
   userRequests: UserRequest[];
 

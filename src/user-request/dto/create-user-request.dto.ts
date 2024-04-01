@@ -25,12 +25,12 @@ export class CreateUserRequestDto {
 
   @IsOptional()
   @IsString()
-  userRequestDescription: string;
+  userRequestDescription?: string;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  userRequestQuantity: number;
+  userRequestQuantity?: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -42,8 +42,8 @@ export class CreateUserRequestDto {
   userRequestStoreInfo: string;
 
   @IsOptional()
-  projectUserId: number;
+  studentOnSchoolYearId?: number;
 
   @IsOptional()
-  studentOnActivityId: number;
+  studentOnActivityId?: number;
 }

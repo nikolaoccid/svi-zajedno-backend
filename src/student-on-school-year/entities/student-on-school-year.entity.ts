@@ -63,6 +63,15 @@ export class StudentOnSchoolYear {
   )
   studentOnActivity: StudentOnActivity[];
 
+  @OneToMany(
+    () => UserRequest,
+    (userRequest) => userRequest.studentOnActivity,
+    {
+      nullable: true,
+    },
+  )
+  userRequests: UserRequest[];
+
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
