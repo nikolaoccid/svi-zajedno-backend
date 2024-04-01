@@ -46,11 +46,7 @@ export class StudentOnActivity {
   @Column({ default: 0 })
   actualActivityCost: number;
 
-  @OneToMany(
-    () => UserRequest,
-    (userRequest) => userRequest.studentOnActivity,
-    { nullable: true, eager: true },
-  )
+  @OneToMany(() => UserRequest, (userRequest) => userRequest.studentOnActivity)
   userRequests: UserRequest[];
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
