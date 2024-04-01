@@ -9,12 +9,9 @@ import {
   Post,
   Put,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User, UserRole } from '../users/user.entity';
 import { SchoolYearDto } from './dto/school-year.dto';
 import { SchoolYearService } from './school-year.service';
 
@@ -25,13 +22,7 @@ export class SchoolYearController {
   constructor(private readonly schoolYearService: SchoolYearService) {}
 
   @Post()
-  create(
-    @AuthenticatedUser() user: User,
-    @Body() createSchoolYearDto: SchoolYearDto,
-  ) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  create(@Body() createSchoolYearDto: SchoolYearDto) {
     return this.schoolYearService.create(createSchoolYearDto);
   }
 
@@ -52,52 +43,29 @@ export class SchoolYearController {
     required: false,
   })
   findAll(
-    @AuthenticatedUser() user: User,
     @Query() query: { query: string },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.schoolYearService.findAll({ page, limit }, query.query);
   }
 
   @Get(':id')
-  findOne(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.schoolYearService.getById(+id);
   }
   @Get('/startYear/:startYear')
-  findOneByStartYear(
-    @AuthenticatedUser() user: User,
-    @Param('startYear') startYear: string,
-  ) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOneByStartYear(@Param('startYear') startYear: string) {
     return this.schoolYearService.getByStartYear(+startYear);
   }
 
   @Put(':id')
-  update(
-    @AuthenticatedUser() user: User,
-    @Param('id') id: string,
-    @Body() schoolYearDto: SchoolYearDto,
-  ) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  update(@Param('id') id: string, @Body() schoolYearDto: SchoolYearDto) {
     this.schoolYearService.update(+id, schoolYearDto);
   }
 
   @Delete(':id')
-  remove(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role != UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.schoolYearService.remove(+id);
   }
 }

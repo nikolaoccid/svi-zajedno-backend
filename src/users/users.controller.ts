@@ -4,7 +4,6 @@ import {
   Controller,
   Get,
   Post,
-  UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
