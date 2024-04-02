@@ -30,7 +30,7 @@ export class UserRequest extends RequestEntity {
   @Column({ nullable: true })
   userRequestQuantity: number;
 
-  @Column({ type: 'money' })
+  @Column()
   userRequestCostPerUnit: number;
 
   @Column()
