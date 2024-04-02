@@ -14,8 +14,7 @@ export class UserRequestService {
   ) {}
 
   async findAll(): Promise<UserRequest[]> {
-    const records = await this.userRequestRepository.find();
-    return records;
+    return await this.userRequestRepository.find();
   }
 
   async findWithCustomWhere(where: any) {
