@@ -1,4 +1,10 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CookieSessionModule } from 'nestjs-cookie-session';
@@ -6,7 +12,10 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { ActivityModule } from './activity/activity.module';
 import { Activity } from './activity/entities/activity.entity';
+import { AdminRoleMiddleware } from './admin-role.middleware';
+import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { JwtMiddleware } from './auth/jwt.middleware';
 import { AxiosErrorFilter } from './axios-error.filter';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
@@ -25,6 +34,9 @@ import { StudentOnActivity } from './student-on-activity/entities/student-on-act
 import { StudentOnActivityModule } from './student-on-activity/student-on-activity.module';
 import { StudentOnSchoolYear } from './student-on-school-year/entities/student-on-school-year.entity';
 import { StudentOnSchoolYearModule } from './student-on-school-year/student-on-school-year.module';
+import { RequestEntity } from './user-request/entities/request.entity';
+import { UserRequest } from './user-request/entities/user-request.entity';
+import { UserRequestModule } from './user-request/user-request.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { Config } from './utils/config.service';
@@ -57,6 +69,8 @@ export const dbModule = TypeOrmModule.forRootAsync({
       StudentOnSchoolYear,
       StudentOnActivity,
       Contact,
+      RequestEntity,
+      UserRequest,
     ],
     migrationsTableName: 'migrations',
     migrations: ['dist/migrations/*.{ts,js}'],
@@ -103,6 +117,7 @@ const classSerializerInterceptorModule = {
     StatisticsModule,
     ExportModule,
     ContactModule,
+    UserRequestModule,
   ],
   controllers: [],
   providers: [
@@ -111,4 +126,23 @@ const classSerializerInterceptorModule = {
     queryFieldFilterModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer
+      .apply(JwtMiddleware)
+      .exclude(
+        { path: 'auth/(.*)', method: RequestMethod.ALL },
+        { path: 'users/(.*)', method: RequestMethod.POST },
+      )
+      .forRoutes('*');
+
+    consumer
+      .apply(AdminRoleMiddleware)
+      .exclude(
+        { path: '/auth/(.*)/(.*)', method: RequestMethod.ALL },
+        { path: 'users', method: RequestMethod.POST },
+        { path: 'users/me', method: RequestMethod.GET },
+      )
+      .forRoutes('*');
+  }
+}

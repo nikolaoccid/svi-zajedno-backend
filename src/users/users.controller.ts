@@ -4,7 +4,6 @@ import {
   Controller,
   Get,
   Post,
-  UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -22,11 +21,7 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  async getAll(@AuthenticatedUser() user: User) {
-    if (user.role !== 'admin') {
-      throw new UnauthorizedException();
-    }
-
+  async getAll() {
     return await this.usersService.findAll();
   }
 
@@ -36,13 +31,7 @@ export class UsersController {
   }
 
   @Post()
-  async create(
-    @AuthenticatedUser() user: User,
-    @Body() createUserDto: CreateUserDto,
-  ) {
-    if (!user) {
-      return new UnauthorizedException();
-    }
+  async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
 }

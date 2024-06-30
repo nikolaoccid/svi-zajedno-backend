@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { StudentOnSchoolYear } from '../../student-on-school-year/entities/student-on-school-year.entity';
+import { UserRequest } from '../../user-request/entities/user-request.entity';
 export enum Gender {
   Male = 'male',
   Female = 'female',

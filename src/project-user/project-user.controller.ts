@@ -9,13 +9,10 @@ import {
   Post,
   Put,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { IPaginationMeta, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User, UserRole } from '../users/user.entity';
 import { CreateProjectUserDto } from './dto/create-project-user.dto';
 import { UpdateProjectUserDto } from './dto/update-project-user.dto';
 import { ProjectUser } from './entities/project-user.entity';
@@ -29,12 +26,8 @@ export class ProjectUserController {
 
   @Post()
   create(
-    @AuthenticatedUser() user: User,
     @Body() createProjectUserDto: CreateProjectUserDto,
   ): Promise<ProjectUser> {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.projectUserService.create(createProjectUserDto);
   }
 
@@ -60,7 +53,6 @@ export class ProjectUserController {
     required: false,
   })
   findAll(
-    @AuthenticatedUser() user: User,
     @Query() query: { query: string },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
@@ -68,9 +60,6 @@ export class ProjectUserController {
   ):
     | Promise<ProjectUser[]>
     | Promise<Pagination<ProjectUser, IPaginationMeta>> {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     if (query.query && schoolYearId) {
       return this.projectUserService.findOneByQueryAndStudentOnActivity(
         query.query,
@@ -88,30 +77,20 @@ export class ProjectUserController {
   }
 
   @Get(':id')
-  findOne(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.projectUserService.findOne(+id);
   }
 
   @Put(':id')
   update(
-    @AuthenticatedUser() user: User,
     @Param('id') id: string,
     @Body() updateProjectUserDto: UpdateProjectUserDto,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.projectUserService.update(+id, updateProjectUserDto);
   }
 
   @Delete(':id')
-  remove(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.projectUserService.remove(+id);
   }
 }

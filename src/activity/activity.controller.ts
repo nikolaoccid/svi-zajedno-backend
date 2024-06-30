@@ -13,8 +13,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User, UserRole } from '../users/user.entity';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
@@ -48,7 +46,6 @@ export class ActivityController {
     required: false,
   })
   findAll(
-    @AuthenticatedUser() user: User,
     @Query() query: { query: string },
     @Query('schoolYearId', new DefaultValuePipe(0), ParseIntPipe)
     schoolYearId = 0,
@@ -56,9 +53,6 @@ export class ActivityController {
     studentOnSchoolYearId = 0,
     @Query('activityStatus') activityStatus: ActivityStatus,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     if (
       schoolYearId !== 0 ||
       query.query !== undefined ||
@@ -77,21 +71,12 @@ export class ActivityController {
   }
 
   @Post()
-  create(
-    @Body() createActivityDto: CreateActivityDto,
-    @AuthenticatedUser() user: User,
-  ): Promise<Activity> {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  create(@Body() createActivityDto: CreateActivityDto): Promise<Activity> {
     return this.activityService.create(createActivityDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.activityService.findOne(+id);
   }
 
@@ -99,19 +84,12 @@ export class ActivityController {
   update(
     @Param('id') id: string,
     @Body() updateActivityDto: UpdateActivityDto,
-    @AuthenticatedUser() user: User,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.activityService.update(+id, updateActivityDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.activityService.remove(+id);
   }
 }

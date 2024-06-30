@@ -9,13 +9,10 @@ import {
   Post,
   Put,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User, UserRole } from '../users/user.entity';
 import { CreateProjectAssociateDto } from './dto/create-project-associate.dto';
 import { UpdateProjectAssociateDto } from './dto/update-project-associate.dto';
 import { ProjectAssociate } from './entities/project-associate.entity';
@@ -32,11 +29,7 @@ export class ProjectAssociateController {
   @Post()
   create(
     @Body() createProjectAssociateDto: CreateProjectAssociateDto,
-    @AuthenticatedUser() user: User,
   ): Promise<ProjectAssociate> {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.projectAssociateService.create(createProjectAssociateDto);
   }
 
@@ -60,13 +53,9 @@ export class ProjectAssociateController {
     @Query() query: { query: string },
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
-    @AuthenticatedUser() user: User,
   ):
     | Promise<ProjectAssociate[]>
     | Promise<Pagination<ProjectAssociate, IPaginationMeta>> {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     if (query.query) {
       return this.projectAssociateService.findOneByQuery(query.query, {
         page,
@@ -78,10 +67,7 @@ export class ProjectAssociateController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.projectAssociateService.findOne(+id);
   }
 
@@ -89,19 +75,12 @@ export class ProjectAssociateController {
   update(
     @Param('id') id: string,
     @Body() updateProjectAssociateDto: UpdateProjectAssociateDto,
-    @AuthenticatedUser() user: User,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.projectAssociateService.update(+id, updateProjectAssociateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @AuthenticatedUser() user: User) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.projectAssociateService.remove(+id);
   }
 }
