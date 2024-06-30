@@ -5,7 +5,7 @@ import {
   Session,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -14,6 +14,7 @@ import { JwtService } from './jwt.service';
 
 @Controller('auth')
 @ApiTags('Auth')
+@ApiBearerAuth()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

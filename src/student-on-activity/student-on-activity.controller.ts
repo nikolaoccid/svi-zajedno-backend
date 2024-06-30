@@ -9,12 +9,9 @@ import {
   Patch,
   Post,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { AuthenticatedUser } from '../auth/decorators/authenticated-user.decorator';
-import { User, UserRole } from '../users/user.entity';
 import { CreateStudentOnActivityDto } from './dto/create-student-on-activity.dto';
 import { UpdateStudentOnActivityDto } from './dto/update-student-on-activity.dto';
 import { StudentOnActivityService } from './student-on-activity.service';
@@ -28,13 +25,7 @@ export class StudentOnActivityController {
   ) {}
 
   @Post()
-  create(
-    @AuthenticatedUser() user: User,
-    @Body() createStudentOnActivityDto: CreateStudentOnActivityDto,
-  ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  create(@Body() createStudentOnActivityDto: CreateStudentOnActivityDto) {
     return this.studentOnActivityService.create(createStudentOnActivityDto);
   }
 
@@ -45,13 +36,9 @@ export class StudentOnActivityController {
     required: false,
   })
   findAll(
-    @AuthenticatedUser() user: User,
     @Query('studentOnSchoolYearId', new DefaultValuePipe(0), ParseIntPipe)
     studentOnSchoolYearId = 0,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     if (studentOnSchoolYearId !== 0) {
       return this.studentOnActivityService.findAllByStudentOnSchoolYear(
         studentOnSchoolYearId,
@@ -62,22 +49,15 @@ export class StudentOnActivityController {
   }
 
   @Get(':id')
-  findOne(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  findOne(@Param('id') id: string) {
     return this.studentOnActivityService.findOne(+id);
   }
 
   @Patch(':id')
   update(
-    @AuthenticatedUser() user: User,
     @Param('id') id: string,
     @Body() updateStudentOnActivityDto: UpdateStudentOnActivityDto,
   ) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
     return this.studentOnActivityService.update(+id, {
       ...updateStudentOnActivityDto,
       unenrollmentDate: updateStudentOnActivityDto.unenrollmentDate ?? null,
@@ -85,10 +65,7 @@ export class StudentOnActivityController {
   }
 
   @Delete(':id')
-  remove(@AuthenticatedUser() user: User, @Param('id') id: string) {
-    if (user.role !== UserRole.Admin) {
-      throw new UnauthorizedException();
-    }
+  remove(@Param('id') id: string) {
     return this.studentOnActivityService.remove(+id);
   }
 }
