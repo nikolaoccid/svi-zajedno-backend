@@ -1,73 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Svi Zajedno API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend for an activity and attendance tracker used by the Croatian NGO Svi Zajedno. It started as my bachelor's thesis and has been in production since 2023.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The web client is in [svi-zajedno-frontend](https://github.com/nikolaoccid/svi-zajedno-frontend).
 
-## Description
+## What it does
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Tracks activities, categories and which students attended what, per school year
+- Role-based access: admin and regular users, with login requests that an admin approves
+- Statistics per school year for project associates and project users
+- Excel export of project users (ExcelJS)
+- OpenAPI docs served at the root path; the frontend generates its API client from them
 
-## Installation
+## Stack
+
+NestJS 9, TypeORM, PostgreSQL, JWT auth, Swagger (OpenAPI), class-validator.
+
+## Run it locally
 
 ```bash
-$ npm install
+cp .env.example .env        # fill in the values
+docker compose up -d        # Postgres 14, needs POSTGRES_PASSWORD in .env
+npm install
+npm run start:dev           # http://localhost:3001, Swagger UI at /
 ```
 
-## Running the app
+## Configuration
 
-```bash
-# development
-$ npm run start
+| Variable | Purpose |
+|---|---|
+| `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD` | PostgreSQL connection |
+| `DATABASE_DISABLE_SSL` | `true` for a local database without SSL |
+| `JWT_SECRET`, `SESSION_SECRET` | Signing keys; use long random values |
+| `PORT` | Defaults to 3001 |
+| `ENV_NAME` | Environment label |
 
-# watch mode
-$ npm run start:dev
+No secrets are committed. Production values live in the deploy environment.
 
-# production mode
-$ npm run start:prod
-```
+## Layout
 
-## Test
+`src/` has one module per domain: `activity`, `category`, `school-year`, `student-on-activity`, `student-on-school-year`, `project-associate`, `project-user`, `contact`, `user-request`, `users`, `auth`, `statistics`, `export`.
 
-```bash
-# unit tests
-$ npm run test
+## Status
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Production code from a thesis project. It has no automated tests yet.
