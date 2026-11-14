@@ -43,4 +43,4 @@ No secrets are committed. Production values live in the deploy environment.
 
 ## Status
 
-Production code from a thesis project. It has no automated tests yet.
+Production code from a thesis project. `npm test` runs unit tests for the pagination helper and the login check; CI runs lint, build and tests on every push. Coverage of the rest is still thin.
